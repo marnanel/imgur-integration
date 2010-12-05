@@ -9,6 +9,13 @@
 #include "upload.h"
 #include "parse.h"
 
+#define G_IMGUR_ERROR g_imgur_error_quark ()
+GQuark
+g_imgur_error_quark (void)
+{
+  return g_quark_from_static_string ("g-imgur-error-quark");
+}
+
 static void
 imgur_upload_class_init (ImgurUploadClass *klass)
 {
@@ -33,7 +40,7 @@ imgur_upload_init (ImgurUpload *iu)
   GError *error = NULL;
   DBusGProxy *proxy;
   ImgurUploadClass *klass = IMGUR_UPLOAD_GET_CLASS (iu);
-  int ret;
+  guint ret;
 
   dbus_g_connection_register_g_object (klass->connection,
     "/com/imgur",
@@ -98,7 +105,8 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
   gchar *message = NULL;
   GList *parsed, *cursor;
   gchar *temp = NULL;
-  GValue *success_value;
+
+  *error = NULL;
 
   if (strncmp (filename, "file:", 5)==0)
     {
@@ -107,35 +115,100 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
 
   upload (filename, &success, &message, NULL);
 
-  parsed = parse_imgur_response (message, &success);
-
-  *result = g_hash_table_new (g_str_hash, g_str_equal);
-
-  for (cursor=parsed; cursor; cursor = cursor->next)
+  if (!success)
     {
-      if (temp)
-        {
-          hash_add_entry (*result, temp, cursor->data);
-          g_free (cursor->data);
-          g_free (temp);
-          temp = NULL;
-        }
-      else
-        {
-          temp = cursor->data;
-        }
+       if (!message)
+         {
+            message = g_strdup ("Error in uploading.");
+         }
+
+       g_set_error (error,
+                    G_IMGUR_ERROR,
+                    1,
+                    "%s", message);
+
+       g_free (message);
+
+       return FALSE;
     }
 
-  g_list_free (parsed);
-  g_free (message);
+  parsed = parse_imgur_response (message, &success);
 
-  /* FIXME: This is wrong.  success==FALSE means error. */
-  success_value = g_malloc0 (sizeof(GValue));
-  g_value_init (success_value, G_TYPE_BOOLEAN);
-  g_value_set_boolean (success_value, success);
-  g_hash_table_insert (*result, g_strdup("success"), success_value);
+  if (success)
+    {
+       *result = g_hash_table_new (g_str_hash, g_str_equal);
 
-  return TRUE;
+       for (cursor=parsed; cursor; cursor = cursor->next)
+         {
+           if (temp)
+             {
+               hash_add_entry (*result, temp, cursor->data);
+               g_free (cursor->data);
+               g_free (temp);
+               temp = NULL;
+             }
+           else
+             {
+               temp = cursor->data;
+             }
+          }
+
+       g_list_free (parsed);
+       g_free (message);
+
+       return TRUE;
+    }
+  else
+    {
+       /* imgur sent us an error code */
+       int code = -2;
+       char *message = NULL;
+       char *temp = NULL;
+
+       for (cursor=parsed; cursor; cursor = cursor->next)
+         {
+           if (temp)
+             {
+               if (strcmp (temp, "error_msg")==0)
+                 {
+                   message = cursor->data;
+                 }
+               else if (strcmp (temp, "error_code")==0)
+                 {
+                   code = atoi (cursor->data);
+                   g_free (cursor->data);
+                 }
+               else
+                 {
+                   g_free (cursor->data);
+                 }
+
+               g_free (temp);
+               temp = NULL;
+             }
+           else
+             {
+               temp = cursor->data;
+             }
+         }
+
+       g_free (temp);
+
+       if (!message)
+         {
+           message = g_strdup ("Error in hosting.");
+         }
+
+       g_set_error (error,
+                    G_IMGUR_ERROR,
+                    code,
+                    "%s", message);
+
+       g_list_free (parsed);
+       g_free (message);
+
+       return FALSE;
+    }
 }
 
 int

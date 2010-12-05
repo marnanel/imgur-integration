@@ -80,8 +80,6 @@ upload (gchar *filename,
   struct curl_httppost *formpost=NULL;
   struct curl_httppost *lastptr=NULL;
 
-  g_warning ("filename is %s", filename);
-
   curl_formadd(&formpost,
                &lastptr,
                CURLFORM_COPYNAME, "image",
