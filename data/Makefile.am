@@ -1,0 +1,11 @@
+BUILT_FILES=com.imgur.service
+EXTRA_DIST=com.imgur.service
+
+servicedir = $(datadir)/dbus-1/services
+service_in_files = com.imgur.service.in
+service_DATA = com.imgur.service
+CLEANFILES = com.imgur.service
+
+com.imgur.service: com.imgur.service.in
+	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
+

@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.imgur
+Exec=@libexecdir@/imgur-service
+
