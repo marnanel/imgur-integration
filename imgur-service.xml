@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<node name="/com/imgur">
+
+  <interface name="com.imgur">
+
+    <method name="Upload">
+
+      <arg type="s" name="image" direction="in" />
+      <arg type="a{sv}" name="d_ret" direction="out" />
+
+    </method>
+
+  </interface>
+</node>
