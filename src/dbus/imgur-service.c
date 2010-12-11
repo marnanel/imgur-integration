@@ -161,7 +161,7 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
   else
     {
        /* imgur sent us an error code */
-       int code = -2;
+       int code = 2;
        char *message = NULL;
        char *temp = NULL;
 
