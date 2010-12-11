@@ -26,6 +26,8 @@
  */
 char *api_key = "5a2d59b29160b55090e6bd9cd539519f";
 
+#define IMGUR_DEFAULT_URL "http://imgur.com/api/upload.xml"
+
 static size_t
 save_data (void *ptr, size_t size, size_t nmemb, void *data)
 {
@@ -55,6 +57,8 @@ save_data (void *ptr, size_t size, size_t nmemb, void *data)
   return bytes;
 }
 
+#if 0
+/* Temporarily not in use. */
 static int
 report_progress (gboolean (*progress)(char),
 		 double dltotal,
@@ -69,6 +73,7 @@ report_progress (gboolean (*progress)(char),
   else
     return 1; /* abort */
 }
+#endif
 
 void
 upload (gchar *filename,
@@ -76,6 +81,7 @@ upload (gchar *filename,
 	gchar **result,
 	gboolean (*progress)(char))
 {
+  static const char* imgur_url = NULL;
   CURL *curl;
   struct curl_httppost *formpost=NULL;
   struct curl_httppost *lastptr=NULL;
@@ -101,26 +107,49 @@ upload (gchar *filename,
       return;
     }
 
+  if (!imgur_url)
+    {
+      imgur_url = g_getenv ("IMGUR_URL");
+
+      if (!imgur_url)
+        imgur_url = IMGUR_DEFAULT_URL;
+    }
+
   *result = NULL;
 
   curl_easy_setopt (curl, CURLOPT_URL,
-		   "http://imgur.com/api/upload.xml");
+		   imgur_url);
   curl_easy_setopt (curl, CURLOPT_HTTPPOST,
 		   formpost);
   curl_easy_setopt (curl, CURLOPT_WRITEFUNCTION,
 		   save_data);
   curl_easy_setopt (curl, CURLOPT_WRITEDATA,
 		   (void*) result); 
+
+  if (g_getenv ("IMGUR_VERBOSE"))
+    {
+      curl_easy_setopt (curl, CURLOPT_VERBOSE,
+		   TRUE);
+    }
+
+#if 0
+  /* We were using this, but not at present */
   curl_easy_setopt (curl, CURLOPT_PROGRESSFUNCTION,
 		    report_progress);
   curl_easy_setopt (curl, CURLOPT_PROGRESSDATA,
 		    progress);
+#endif
 
   curl_easy_perform (curl);
 
   /* tidy up */
   curl_easy_cleanup(curl);
   curl_formfree(formpost);
+
+  if (g_getenv ("IMGUR_VERBOSE"))
+    {
+      g_print ("%s\n", *result);
+    }
 
   if (result==NULL)
     {
