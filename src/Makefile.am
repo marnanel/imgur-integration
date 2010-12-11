@@ -1,2 +1,2 @@
-SUBDIRS = dbus
+SUBDIRS = dbus eog cmd
 

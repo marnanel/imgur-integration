@@ -1,0 +1,10 @@
+
+[Eog Plugin]
+Module=imgur
+IAge=2
+Name=Post to imgur.com
+Description=Hosts photos on the web
+Authors=Thomas Thurman <thomas@thurman.org.uk>
+Copyright=Copyright (c) 2010 Thomas Thurman
+Website=http://thomasthurman.org
+
