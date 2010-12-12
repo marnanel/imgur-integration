@@ -9,7 +9,9 @@ libimgur_la_SOURCES = \
 	eog-imgur-plugin.c \
 	eog-imgur-plugin.h \
 	eog-imgur-lsw.c \
-	eog-imgur-lsw.h
+	eog-imgur-lsw.h \
+	eog-imgur-ui.c \
+	eog-imgur-ui.h
 
 libimgur_la_LIBADD = \
 	$(EOG_LIBS) \

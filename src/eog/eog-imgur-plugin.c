@@ -9,6 +9,7 @@
 #include <eog/eog-debug.h>
 
 #include "eog-imgur-lsw.h"
+#include "eog-imgur-ui.h"
 
 #define MENU_PATH "/MainMenu/"
 
@@ -18,7 +19,22 @@ static void
 post_to_imgur (GtkAction *action,
 	EogWindow *window)
 {
-	/* stuff */
+	eog_imgur_ui_display (GTK_WINDOW (window),
+		"(Post to imgur)",
+		FALSE);
+}
+
+static void
+post_to_libsocialweb (GtkAction *action,
+	EogWindow *window)
+{
+	eog_imgur_ui_display ( GTK_WINDOW (window),
+			/*
+			 * the 12 is to bypass the "ImgurService"
+			 * prefix
+			 */
+		gtk_action_get_name (action) + 12,
+		TRUE);
 }
 
 static const GtkActionEntry our_menu =
@@ -72,7 +88,7 @@ add_lsw_service (GtkUIManager *manager,
 		message,
 		NULL,
 		NULL,
-		NULL
+		G_CALLBACK(post_to_libsocialweb)
 	};
 
 	gtk_action_group_add_actions (menu,
