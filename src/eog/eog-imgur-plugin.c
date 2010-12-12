@@ -55,7 +55,7 @@ post_to_libsocialweb (GtkAction *action,
 	if (strcmp (service, "twitter")==0)
 	  {
 	    /* special case, bit of a hack */
-	    character_limit = 140 - 28;
+	    character_limit = 140 - (28+3);
 	    /* 28 is the typical length of an imgur URL */
 	  }
 
