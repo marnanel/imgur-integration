@@ -1,3 +1,4 @@
+#include <string.h>
 #include "eog-imgur-ui.h"
 
 void
@@ -69,6 +70,42 @@ message_response (GtkDialog *dialogue,
 	/* g_free (details); */
 }
 
+static void
+restrict_message_length (GtkTextBuffer *buffer,
+	MessageDetails *details)
+{
+	gchar *text;
+	GtkTextIter start, end;
+
+	gtk_text_buffer_get_bounds (buffer,
+			&start, &end);
+
+	text = gtk_text_buffer_get_slice (buffer,
+			&start, &end, TRUE);
+
+	if (strlen(text) > details->character_limit)
+	  {
+		gint cursor_position;
+
+		g_object_get (buffer,
+			"cursor-position", &cursor_position,
+			NULL);
+
+		gtk_text_buffer_get_iter_at_offset (buffer,
+			&start,
+			cursor_position-1);
+
+		gtk_text_buffer_get_iter_at_offset (buffer,
+			&end,
+			cursor_position);
+
+		gtk_text_buffer_delete (buffer,
+			&start, &end);
+	  }
+
+	g_free (text);
+}
+
 void
 eog_imgur_ui_get_message (GtkWindow *parent,
 	const gchar *service,
@@ -90,6 +127,17 @@ eog_imgur_ui_get_message (GtkWindow *parent,
 	gtk_text_view_set_editable (GTK_TEXT_VIEW (details->textview), TRUE);
 	gtk_text_view_set_left_margin (GTK_TEXT_VIEW (details->textview), 10);
 	gtk_text_view_set_right_margin (GTK_TEXT_VIEW (details->textview), 10);
+
+	if (details->character_limit)
+	  {
+		GtkTextBuffer *buffer =
+			gtk_text_view_get_buffer (GTK_TEXT_VIEW (details->textview));
+
+		g_signal_connect (G_OBJECT (buffer),
+			"changed",
+			G_CALLBACK (restrict_message_length),
+			details);
+	  }
 
 	dialogue = gtk_dialog_new_with_buttons ("Eye of GNOME",
 		parent,
