@@ -181,7 +181,7 @@ void eog_imgur_ui_launch_browser (GtkWindow *parent,
 		 */
 		eog_imgur_ui_display (parent,
 				url,
-				TRUE); /* not an error! */
+				FALSE); /* not an error! */
 	}
 
 	g_free (command_line);
