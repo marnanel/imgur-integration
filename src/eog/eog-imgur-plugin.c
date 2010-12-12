@@ -27,7 +27,7 @@ post_to_imgur (GtkAction *action,
 static void
 handle_libsocialweb_message (GtkWindow *parent,
 	gchar *status_message,
-	gchar *service)
+	const gchar *service)
 {
 	gchar *temp = g_strdup_printf ("%s - %s",
 		status_message,

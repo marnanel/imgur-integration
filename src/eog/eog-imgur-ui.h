@@ -6,7 +6,7 @@
 
 typedef void (EogImgurUiMessageCallback) (GtkWindow *parent,
 	gchar *status_message,
-	gchar *service);
+	const gchar *service);
 
 void eog_imgur_ui_display (GtkWindow *parent,
 	const gchar *message,
