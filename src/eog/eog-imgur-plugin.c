@@ -22,6 +22,10 @@ post_to_imgur (GtkAction *action,
 	eog_imgur_ui_display (GTK_WINDOW (window),
 		"(Post to imgur)",
 		FALSE);
+
+	eog_imgur_ui_launch_browser (GTK_WINDOW (window),
+			"http://www.example.com");
+
 }
 
 static void

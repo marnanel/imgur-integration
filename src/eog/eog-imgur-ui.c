@@ -167,8 +167,24 @@ eog_imgur_ui_get_message (GtkWindow *parent,
 void eog_imgur_ui_launch_browser (GtkWindow *parent,
 	gchar *url)
 {
-	/* stub */
-	eog_imgur_ui_display (parent, url, FALSE);
+	gchar *command_line =
+		g_strdup_printf ("xdg-open %s", url);
+
+	if (!g_spawn_command_line_async (command_line,
+		NULL))
+	{
+		/*
+		 * Spawning the browser failed.
+		 * It's not important why it failed;
+		 * the important thing is to tell them
+		 * the URL anyway.
+		 */
+		eog_imgur_ui_display (parent,
+				url,
+				TRUE); /* not an error! */
+	}
+
+	g_free (command_line);
 }
 
 
