@@ -4,7 +4,8 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-typedef void (EogImgurUiMessageCallback) (gchar *status_message,
+typedef void (EogImgurUiMessageCallback) (GtkWindow *parent,
+	gchar *status_message,
 	gchar *service);
 
 void eog_imgur_ui_display (GtkWindow *parent,
@@ -12,7 +13,7 @@ void eog_imgur_ui_display (GtkWindow *parent,
 	gboolean is_error);
 
 void eog_imgur_ui_get_message (GtkWindow *parent,
-	gchar *service,
+	const gchar *service,
 	gint character_limit,
 	EogImgurUiMessageCallback *callback);
 

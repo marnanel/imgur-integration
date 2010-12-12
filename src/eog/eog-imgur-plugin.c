@@ -25,16 +25,44 @@ post_to_imgur (GtkAction *action,
 }
 
 static void
+handle_libsocialweb_message (GtkWindow *parent,
+	gchar *status_message,
+	gchar *service)
+{
+	gchar *temp = g_strdup_printf ("%s - %s",
+		status_message,
+		service);
+
+	eog_imgur_ui_display (parent,
+		temp,
+		FALSE);
+
+	g_free (temp);
+}
+
+static void
 post_to_libsocialweb (GtkAction *action,
 	EogWindow *window)
 {
-	eog_imgur_ui_display ( GTK_WINDOW (window),
-			/*
-			 * the 12 is to bypass the "ImgurService"
-			 * prefix
-			 */
-		gtk_action_get_name (action) + 12,
-		TRUE);
+	gint character_limit = 0; /* no limit */
+
+	/*
+	 * the 12 is to bypass the "ImgurService"
+	 * prefix
+	 */
+	const gchar *service = gtk_action_get_name (action) + 12;
+
+	if (strcmp (service, "twitter")==0)
+	  {
+	    /* special case, bit of a hack */
+	    character_limit = 140 - 28;
+	    /* 28 is the typical length of an imgur URL */
+	  }
+
+	eog_imgur_ui_get_message (GTK_WINDOW (window),
+			service,
+			character_limit,
+			handle_libsocialweb_message);
 }
 
 static const GtkActionEntry our_menu =

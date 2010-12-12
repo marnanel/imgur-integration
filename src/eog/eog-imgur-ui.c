@@ -21,7 +21,7 @@ eog_imgur_ui_display (GtkWindow *parent,
 
 void
 eog_imgur_ui_get_message (GtkWindow *parent,
-	gchar *service,
+	const gchar *service,
 	gint character_limit,
 	EogImgurUiMessageCallback *callback)
 {
