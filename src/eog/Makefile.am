@@ -11,7 +11,9 @@ libimgur_la_SOURCES = \
 	eog-imgur-lsw.c \
 	eog-imgur-lsw.h \
 	eog-imgur-ui.c \
-	eog-imgur-ui.h
+	eog-imgur-ui.h \
+	eog-imgur-post.c \
+	eog-imgur-post.h
 
 libimgur_la_LIBADD = \
 	$(EOG_LIBS) \

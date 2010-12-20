@@ -10,40 +10,95 @@
 
 #include "eog-imgur-lsw.h"
 #include "eog-imgur-ui.h"
+#include "eog-imgur-post.h"
 
 #define MENU_PATH "/MainMenu/"
 
 EOG_PLUGIN_REGISTER_TYPE (EogImgurPlugin, eog_imgur_plugin);
 
+GtkUIManager *manager = NULL;
+GtkActionGroup *menu = NULL;
+EogWindow *the_window = NULL;
+int ui_id;
+
+typedef struct {
+	GtkWindow *window;
+	gchar *message;
+	gchar *service;
+} ImgurMessage;
+
+/**
+ * Callback both after posting to imgur only
+ * (so we open a browser) and after posting to
+ * imgur in order to post to libsocialweb
+ * (so we forward stuff to libsocialweb).
+ */
+static void
+post_callback (gboolean success,
+	gchar *result,
+	gpointer user_data)
+{
+	/* STUB */
+
+	ImgurMessage *im = user_data;
+	gchar *temp = g_strdup_printf("%d // %s // %s // %s",
+		success,
+		result,
+		im->message? im->message : "NONE",
+		im->service? im->service: "NONE");
+
+	eog_imgur_ui_display (GTK_WINDOW (the_window),
+		temp,
+		FALSE);
+
+	g_free (im->message);
+	g_free (im->service);
+	g_free (im);
+	g_free (temp);
+}
+
+/**
+ * Called by the menu option to post to imgur.
+ */
 static void
 post_to_imgur (GtkAction *action,
 	EogWindow *window)
 {
-	eog_imgur_ui_display (GTK_WINDOW (window),
-		"(Post to imgur)",
-		FALSE);
+	ImgurMessage *im = g_malloc(sizeof(ImgurMessage));
 
-	eog_imgur_ui_launch_browser (GTK_WINDOW (window),
-			"http://www.example.com");
+	im->window = GTK_WINDOW (window);
+	im->message = NULL;
+	im->service = NULL;
 
+	eog_imgur_post ("filename", /* FIXME */
+        	post_callback,
+	        im);
 }
 
+/**
+ * Callback for the dialogue which requests an
+ * extra message to be addded to libsocialweb
+ * messages.
+ */
 static void
 handle_libsocialweb_message (GtkWindow *parent,
 	gchar *status_message,
 	const gchar *service)
 {
-	gchar *temp = g_strdup_printf ("%s - %s",
-		status_message,
-		service);
+	ImgurMessage *im = g_malloc(sizeof(ImgurMessage));
 
-	eog_imgur_ui_display (parent,
-		temp,
-		FALSE);
+	im->window = GTK_WINDOW (parent);
+	im->message = g_strdup (status_message);
+	im->service = g_strdup (service);
 
-	g_free (temp);
+	eog_imgur_post ("filename", /* FIXME */
+		post_callback,
+		im);
 }
 
+/**
+ * Called by the menu options which post to libsocialweb,
+ */
 static void
 post_to_libsocialweb (GtkAction *action,
 	EogWindow *window)
@@ -88,11 +143,6 @@ static const GtkActionEntry our_post =
 	N_("Host this picture on the web"),
 	G_CALLBACK(post_to_imgur)
 };
-
-GtkUIManager *manager = NULL;
-GtkActionGroup *menu = NULL;
-EogWindow *the_window = NULL;
-int ui_id;
 
 static void
 eog_imgur_plugin_finalize (GObject *object)
