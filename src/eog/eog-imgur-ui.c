@@ -165,7 +165,7 @@ eog_imgur_ui_get_message (GtkWindow *parent,
 }
 
 void eog_imgur_ui_launch_browser (GtkWindow *parent,
-	gchar *url)
+	const gchar *url)
 {
 	gchar *command_line =
 		g_strdup_printf ("xdg-open %s", url);
