@@ -14,3 +14,25 @@ src/cmd/
 src/eog/
    An Eye of Gnome (eog) plugin.
 
+Things which still need to be done
+==================================
+
+ * Need to check that a fresh checkout builds.
+
+ * The unit and integration tests need finishing
+   and integrating.
+
+ * The DBus interface should allow access to more of
+   the imgur API, such as deletion.
+
+ * We should record the deletion hash, and have
+   some kind of app to delete images.
+
+ * imgur now supports login (for galleries), and
+   we should also support this.
+
+ * There was a half-written Maemo libsharing service;
+   this should be rescued and integrated.
+
+Patches are always welcomed.
+
