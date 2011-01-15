@@ -1,0 +1,16 @@
+This is a set of plugins for various free desktop programs
+which add the ability to post to imgur.com.
+
+The src directory contains:
+
+src/dbus/
+   The back end to everything else.  This provides a DBus
+   service, com.imgur, which allows upload of arbitrary
+   images to the web.
+
+src/cmd/
+   A simple command-line interface to the DBus back end.
+
+src/eog/
+   An Eye of Gnome (eog) plugin.
+
