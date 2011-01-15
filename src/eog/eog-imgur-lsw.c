@@ -30,6 +30,7 @@ lsw_post_to_service_cb (SwClientService *service,
 	gpointer userdata)
 {
 	LswPostToServiceCallback *cb = userdata;
+	g_warning ("%d", __LINE__);
 
 	cb (error);
 
@@ -45,6 +46,7 @@ lsw_post_to_service (gchar *service_name,
 	SwClientService *service = sw_client_get_service (client,
                                         service_name);
 
+	g_warning ("%d", __LINE__);
 	sw_client_service_update_status (service,
                                  lsw_post_to_service_cb,
                                  status,

@@ -18,7 +18,7 @@ void eog_imgur_ui_get_message (GtkWindow *parent,
 	EogImgurUiMessageCallback *callback);
 
 void eog_imgur_ui_launch_browser (GtkWindow *parent,
-	gchar *url);
+	const gchar *url);
 
 #endif
 

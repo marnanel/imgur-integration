@@ -28,6 +28,25 @@ typedef struct {
 } ImgurMessage;
 
 /**
+ * Called after we post a message to libsocialweb,
+ * to tell the user it worked (or didn't).
+ */
+static void
+posted_to_lsw (const GError *error)
+{
+	const gchar *message = "Posted!";
+
+	if (error)
+	  {
+		message = error->message;
+	  }
+
+	eog_imgur_ui_display (GTK_WINDOW (the_window),
+				message,
+				error!=NULL);
+}
+
+/**
  * Callback both after posting to imgur only
  * (so we open a browser) and after posting to
  * imgur in order to post to libsocialweb
@@ -35,26 +54,76 @@ typedef struct {
  */
 static void
 post_callback (gboolean success,
-	gchar *result,
+	const gchar *result,
 	gpointer user_data)
 {
 	/* STUB */
 
 	ImgurMessage *im = user_data;
-	gchar *temp = g_strdup_printf("%d // %s // %s // %s",
-		success,
-		result,
-		im->message? im->message : "NONE",
-		im->service? im->service: "NONE");
 
-	eog_imgur_ui_display (GTK_WINDOW (the_window),
-		temp,
-		FALSE);
+	if (success)
+	  {
+		if (im->service)
+		  {
+			gchar *message;
+
+			if (im->message)
+			  {
+				message = g_strdup_printf ("%s - %s",
+					result, message);
+			  }
+			else
+			  {
+				message = g_strdup (result);
+			  }
+
+			lsw_post_to_service (im->service,
+					message,
+					posted_to_lsw);
+
+			g_free (message);
+
+		  } else {
+			/* no service listed; open browser */
+			eog_imgur_ui_launch_browser (GTK_WINDOW (im->window),
+				result);
+		  }
+	  }
+	else
+	  {
+		/* problem: show error */
+		eog_imgur_ui_display (GTK_WINDOW (im->window),
+				result,
+				FALSE);
+	  }
 
 	g_free (im->message);
 	g_free (im->service);
 	g_free (im);
-	g_free (temp);
+}
+
+/**
+ * Returns the filename of the image in the given window,
+ * as a new string which must be freed by the caller.
+ * Returns NULL on failure.
+ */
+static gchar*
+get_filename_for_window (EogWindow *window)
+{
+	EogImage *image;
+	GFile *file;
+
+	image = eog_window_get_image (window);
+
+	if (!image)
+		return NULL;
+
+	file = eog_image_get_file (image);
+
+	if (!file)
+		return NULL;
+
+	return g_file_get_path (file);
 }
 
 /**
@@ -64,15 +133,28 @@ static void
 post_to_imgur (GtkAction *action,
 	EogWindow *window)
 {
+	gchar *filename;
 	ImgurMessage *im = g_malloc(sizeof(ImgurMessage));
 
 	im->window = GTK_WINDOW (window);
 	im->message = NULL;
 	im->service = NULL;
 
-	eog_imgur_post ("filename", /* FIXME */
+	filename = get_filename_for_window (window);
+
+	if (!filename)
+	  {
+		eog_imgur_ui_display (GTK_WINDOW (window),
+			_("The image cannot be found for uploading."),
+			TRUE);	
+		return;
+	  }
+
+	eog_imgur_post (filename,
         	post_callback,
 	        im);
+
+	g_free (filename);
 }
 
 /**
@@ -85,15 +167,18 @@ handle_libsocialweb_message (GtkWindow *parent,
 	gchar *status_message,
 	const gchar *service)
 {
+#if 0
+/* We are not using LSW at present. */
 	ImgurMessage *im = g_malloc(sizeof(ImgurMessage));
 
 	im->window = GTK_WINDOW (parent);
 	im->message = g_strdup (status_message);
 	im->service = g_strdup (service);
 
-	eog_imgur_post ("filename", /* FIXME */
+	eog_imgur_post (get_filename_for_window (window),
 		post_callback,
 		im);
+#endif
 }
 
 /**
@@ -246,6 +331,8 @@ impl_activate (EogPlugin *plugin,
 			GTK_UI_MANAGER_MENUITEM,
 			FALSE);
 
+#if 0
+/* These have been removed in this version */
 	gtk_ui_manager_add_ui (manager,
 			ui_id,
 			MENU_PATH "ImgurMenu/",
@@ -255,6 +342,7 @@ impl_activate (EogPlugin *plugin,
 			FALSE);
 
 	lsw_list_services (add_lsw_services);	
+#endif
 }
 
 static void
