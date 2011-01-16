@@ -17,8 +17,6 @@ src/eog/
 Things which still need to be done
 ==================================
 
- * Need to check that a fresh checkout builds.
-
  * The unit and integration tests need finishing
    and integrating.
 
