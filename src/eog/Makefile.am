@@ -1,5 +1,7 @@
 pluginsdir = $(libdir)/eog/plugins
 
+EXTRA_DIST = imgur.eog-plugin
+
 INCLUDES = \
 	$(GLIB_CFLAGS) \
 	$(EOG_CFLAGS) \
