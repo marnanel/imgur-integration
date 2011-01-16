@@ -6,6 +6,7 @@ INCLUDES = \
 	$(LSWCLIENT_CFLAGS)
 
 libimgur_la_SOURCES = \
+	imgur-client-glue.h \
 	eog-imgur-plugin.c \
 	eog-imgur-plugin.h \
 	eog-imgur-lsw.c \
@@ -26,4 +27,5 @@ AM_LDFLAGS = -avoid-version -module
 
 plugins_LTLIBRARIES = \
 	libimgur.la
+
 

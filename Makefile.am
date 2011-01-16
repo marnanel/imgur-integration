@@ -1,4 +1,4 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src data
+SUBDIRS = data src
 

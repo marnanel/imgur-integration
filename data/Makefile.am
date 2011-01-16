@@ -9,3 +9,6 @@ CLEANFILES = com.imgur.service
 com.imgur.service: com.imgur.service.in
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 
+imgur-client-glue.h: imgur-service-glue.xml
+	$(DBUSBINDINGTOOL) --mode=glib-client --output=$@ --prefix=imgur_service $^
+BUILT_SOURCES = imgur-client-glue.h

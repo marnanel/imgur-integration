@@ -1,13 +1,10 @@
-/* There is some amount of code reuse between this file
- * and src/cmd/imgur.c, which is a bad thing.
- */
 #include "eog-imgur-post.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>
 #include <string.h>
 #include <dbus/dbus-glib-bindings.h>
-#include "imgur-client-glue.h"
+#include "../../data/imgur-client-glue.h"
 
 #define UPLOAD_METHOD "Upload"
 #define TIMEOUT_MS 3000
