@@ -20,6 +20,11 @@ AC_PROG_CC_STDC
 
 dnl ----
 
+dnl We don't want static libraries.
+LT_INIT([disable-static])
+
+dnl ----
+
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.4, gobject-2.0 >= 2.4])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
