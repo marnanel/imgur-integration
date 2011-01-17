@@ -167,8 +167,7 @@ handle_libsocialweb_message (GtkWindow *parent,
 	gchar *status_message,
 	const gchar *service)
 {
-#if 0
-/* We are not using LSW at present. */
+#if HAVE_LIBSOCIALWEB
 	ImgurMessage *im = g_malloc(sizeof(ImgurMessage));
 
 	im->window = GTK_WINDOW (parent);
@@ -331,7 +330,7 @@ impl_activate (EogPlugin *plugin,
 			GTK_UI_MANAGER_MENUITEM,
 			FALSE);
 
-#if 0
+#if HAVE_LIBSOCIALWEB
 /* These have been removed in this version */
 	gtk_ui_manager_add_ui (manager,
 			ui_id,

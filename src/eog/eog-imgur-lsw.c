@@ -1,5 +1,7 @@
+#include <config.h>
 #include "eog-imgur-lsw.h"
 
+#ifdef HAVE_LIBSOCIALWEB
 #include <glib.h>
 #include <libsocialweb-client/sw-client.h>
 
@@ -46,13 +48,13 @@ lsw_post_to_service (gchar *service_name,
 	SwClientService *service = sw_client_get_service (client,
                                         service_name);
 
-	g_warning ("%d", __LINE__);
 	sw_client_service_update_status (service,
                                  lsw_post_to_service_cb,
                                  status,
                                  cb);
 
 }
+#endif /* HAVE_LIBSOCIALWEB */
 
 /* EOF eog-imgur-lsw.c */
 

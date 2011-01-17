@@ -20,6 +20,13 @@ AC_PROG_CC_STDC
 
 dnl ----
 
+AC_ARG_ENABLE(libsocialweb,
+  AC_HELP_STRING([--enable-libsocialweb],
+                 [(attempt to) use libsocialweb for posting image links]),,
+  enable_libsocialweb=no)
+
+dnl ----
+
 dnl We don't want static libraries.
 LT_INIT([disable-static])
 
@@ -29,7 +36,7 @@ PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.4, gobject-2.0 >= 2.4])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
-PKG_CHECK_MODULES(DBUSGLIB, [dbus-glib-1])
+PKG_CHECK_MODULES(DBUSGLIB, [dbus-glib-1, dbus-1])
 AC_SUBST(DBUSGLIB_CFLAGS)
 AC_SUBST(DBUSGLIB_LIBS)
 
@@ -41,9 +48,13 @@ PKG_CHECK_MODULES(EOG, [eog])
 AC_SUBST(EOG_CFLAGS)
 AC_SUBST(EOG_LIBS)
 
-PKG_CHECK_MODULES(LSWCLIENT, [libsocialweb-client])
-AC_SUBST(LSWCLIENT_CFLAGS)
-AC_SUBST(LSWCLIENT_LIBS)
+if test x$enable_libsocialweb = xyes; then
+	AC_DEFINE(HAVE_LIBSOCIALWEB,1,[Build with libsocialweb support])
+
+	PKG_CHECK_MODULES(LSWCLIENT, [libsocialweb-client])
+	AC_SUBST(LSWCLIENT_CFLAGS)
+	AC_SUBST(LSWCLIENT_LIBS)
+fi
 
 AC_OUTPUT( Makefile \
 	src/Makefile \

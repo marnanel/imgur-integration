@@ -5,6 +5,7 @@ EXTRA_DIST = imgur.eog-plugin
 INCLUDES = \
 	$(GLIB_CFLAGS) \
 	$(EOG_CFLAGS) \
+	$(DBUSGLIB_CFLAGS) \
 	$(LSWCLIENT_CFLAGS)
 
 libimgur_la_SOURCES = \
