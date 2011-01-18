@@ -25,12 +25,19 @@ AC_ARG_ENABLE(libsocialweb,
                  [(attempt to) use libsocialweb for posting image links]),,
   enable_libsocialweb=no)
 
+AC_ARG_ENABLE(eog,
+  AC_HELP_STRING([--disable-eog],
+                 [don't build the Eye of Gnome plugin]),,
+  enable_eog=yes)
+
 dnl ----
 
 dnl We don't want static libraries.
 LT_INIT([disable-static])
 
 dnl ----
+
+AM_CONDITIONAL(WANT_EOG, test x$enable_eog = xyes)
 
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.4, gobject-2.0 >= 2.4])
 AC_SUBST(GLIB_CFLAGS)
@@ -44,9 +51,17 @@ PKG_CHECK_MODULES(LIBCURL, [libcurl])
 AC_SUBST(LIBCURL_CFLAGS)
 AC_SUBST(LIBCURL_LIBS)
 
-PKG_CHECK_MODULES(EOG, [eog])
-AC_SUBST(EOG_CFLAGS)
-AC_SUBST(EOG_LIBS)
+if test x$enable_eog = xyes; then
+    AC_DEFINE(WANT_EOG,1,[Build with eog support])
+
+    PKG_CHECK_MODULES(EOG, [eog])
+    AC_SUBST(EOG_CFLAGS)
+    AC_SUBST(EOG_LIBS)
+
+    EOG=src/eog/Makefile
+else
+    EOG=
+fi
 
 if test x$enable_libsocialweb = xyes; then
 	AC_DEFINE(HAVE_LIBSOCIALWEB,1,[Build with libsocialweb support])
@@ -59,7 +74,7 @@ fi
 AC_OUTPUT( Makefile \
 	src/Makefile \
 	src/dbus/Makefile \
-	src/eog/Makefile \
+	$EOG \
 	src/cmd/Makefile \
 	data/Makefile \
 	)
