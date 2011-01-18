@@ -77,9 +77,14 @@ post_callback (gboolean success,
 				message = g_strdup (result);
 			  }
 
+#if HAVE_LIBSOCIALWEB
 			lsw_post_to_service (im->service,
 					message,
 					posted_to_lsw);
+#else /* !HAVE_LIBSOCIALWEB */
+			/* Call the callback directly. */
+			posted_to_lsw (NULL);
+#endif /* !HAVE_LIBSOCIALWEB */
 
 			g_free (message);
 
