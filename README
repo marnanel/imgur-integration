@@ -32,5 +32,8 @@ Things which still need to be done
  * There was a half-written Maemo libsharing service;
    this should be rescued and integrated.
 
+ * There should be a man page for the commandline
+   application.
+
 Patches are always welcomed.
 
