@@ -1,6 +1,6 @@
 libexec_PROGRAMS = imgur-service
 
-noinst_PROGRAMS = test-parse
+noinst_PROGRAMS = test-parse test-upload
 
 imgur_service_SOURCES = \
 	imgur-service.c \
@@ -16,6 +16,11 @@ test_parse_SOURCES = \
 	parse.h \
 	test-parse.c
 
+test_upload_SOURCES = \
+	upload.c \
+	upload.h \
+	test-upload.c
+
 imgur-service-glue.h: $(top_builddir)/data/imgur-service-glue.xml
 	$(DBUSBINDINGTOOL) --mode=glib-server --output=$@ --prefix=imgur_service $^
 BUILT_SOURCES = imgur-service-glue.h
@@ -26,6 +31,8 @@ imgur_service_LDADD = \
 test_parse_LDADD = \
 	$(ALL_LIBS)
 
+test_upload_LDADD = \
+	$(ALL_LIBS)
 
 AM_CFLAGS = \
 	-I$(top_srcdir) \

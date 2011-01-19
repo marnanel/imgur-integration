@@ -161,26 +161,3 @@ upload (gchar *filename,
   *success = TRUE;
 }
 
-#ifdef TEST
-static gboolean
-progress (char percent)
-{
-  g_warning("Progress: %d%%", percent);
-  return TRUE;
-}
-
-int
-main()
-{
-  gchar *filename = "lsm.jpg";
-  gchar *result;
-  gboolean success;
-
-  upload (filename,
-	  &success,
-	  &result,
-	  progress);
-
-  g_warning ("Upload: %d %s", success, result);
-}
-#endif
