@@ -57,10 +57,6 @@ if test x$enable_eog = xyes; then
     PKG_CHECK_MODULES(EOG, [eog])
     AC_SUBST(EOG_CFLAGS)
     AC_SUBST(EOG_LIBS)
-
-    EOG=src/eog/Makefile
-else
-    EOG=
 fi
 
 if test x$enable_libsocialweb = xyes; then
@@ -74,7 +70,7 @@ fi
 AC_OUTPUT( Makefile \
 	src/Makefile \
 	src/dbus/Makefile \
-	$EOG \
+	src/eog/Makefile \
 	src/cmd/Makefile \
 	data/Makefile \
 	)

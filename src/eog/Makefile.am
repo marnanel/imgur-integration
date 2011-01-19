@@ -1,3 +1,5 @@
+if WANT_EOG
+
 pluginsdir = $(libdir)/eog/plugins
 
 EXTRA_DIST = imgur.eog-plugin
@@ -31,4 +33,4 @@ AM_LDFLAGS = -avoid-version -module
 plugins_LTLIBRARIES = \
 	libimgur.la
 
-
+endif
