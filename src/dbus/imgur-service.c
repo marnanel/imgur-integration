@@ -196,7 +196,8 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
 
        if (!message)
          {
-           message = g_strdup ("Error in hosting.");
+           message = g_strdup_printf ("Error in hosting: %d.",
+		code);
          }
 
        g_set_error (error,
