@@ -1,5 +1,7 @@
 libexec_PROGRAMS = imgur-service
 
+noinst_PROGRAMS = test-recording
+
 imgur_service_SOURCES = \
 	imgur-service.c \
 	imgur-upload.h \
@@ -28,4 +30,11 @@ ALL_LIBS = \
 	@DBUSGLIB_LIBS@ \
 	@GLIB_LIBS@ \
 	@LIBCURL_LIBS@
+
+test_recording_SOURCES = \
+	recording.c \
+	test-recording.c
+
+test_recording_LDADD = \
+	$(ALL_LIBS)
 
