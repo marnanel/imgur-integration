@@ -1,6 +1,6 @@
 AC_PREREQ([2.59])
 
-AC_INIT([imgur], [0.3.0], [http://thomasthurman.org])
+AC_INIT([imgur], [0.4.0], [http://thomasthurman.org])
 
 AC_CONFIG_MACRO_DIR([m4])
 
