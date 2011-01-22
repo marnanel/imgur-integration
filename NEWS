@@ -1,2 +1,10 @@
-2011-01-15 - v0.1
-   First release.
+2011-01-22 - v0.3.0 - "Daguerre"
+   - Relative pathnames may now be passed to the commandline app.
+   - Some unit tests split out (but not yet made into a comprehensive
+     testing system).
+   - May now be built without the eog plugin.
+   - libsocialweb support is now a compile-time switch, defaulting to off.
+   - Added a tool to turn on the eog plugin from an installation script.
+
+2011-01-15 - v0.2.0 - "Ansell"
+   - First release.
