@@ -20,13 +20,12 @@
 #include <glib.h>
 #include <curl/curl.h>
 #include "upload.h"
+#include "prefs.h"
 
 /*
  * you should possibly get your own
  */
 char *api_key = "5a2d59b29160b55090e6bd9cd539519f";
-
-#define IMGUR_DEFAULT_URL "http://imgur.com/api/upload.xml"
 
 static size_t
 save_data (void *ptr, size_t size, size_t nmemb, void *data)
@@ -76,7 +75,8 @@ report_progress (gboolean (*progress)(char),
 #endif
 
 void
-upload (gchar *filename,
+upload (ImgurPrefs *prefs,
+	gchar *filename,
 	gboolean *success,
 	gchar **result,
 	gboolean (*progress)(char))
@@ -107,15 +107,26 @@ upload (gchar *filename,
       return;
     }
 
+  *result = NULL;
+
   if (!imgur_url)
     {
       imgur_url = g_getenv ("IMGUR_URL");
 
       if (!imgur_url)
-        imgur_url = IMGUR_DEFAULT_URL;
-    }
+      {
+        if (prefs)
+        {
+          imgur_url = prefs->api;
+        }
 
-  *result = NULL;
+        if (!imgur_url)
+        {
+          g_warning ("Could not work out a URL to upload to");
+          return;
+        }
+      }
+    }
 
   curl_easy_setopt (curl, CURLOPT_URL,
 		   imgur_url);

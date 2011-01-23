@@ -35,7 +35,8 @@ main()
   gchar *result;
   gboolean success;
 
-  upload (filename,
+  upload (NULL,
+          filename,
 	  &success,
 	  &result,
 	  progress);

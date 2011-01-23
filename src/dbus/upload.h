@@ -23,8 +23,11 @@
 #include <glib.h>
 #include <curl/curl.h>
 
+#include "prefs.h"
+
 void
-upload (gchar *filename,
+upload (ImgurPrefs *prefs,
+	gchar *filename,
 	gboolean *success,
 	gchar **result,
 	gboolean (*progress)(char));
