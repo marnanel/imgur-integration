@@ -22,11 +22,6 @@
 #include "upload.h"
 #include "prefs.h"
 
-/*
- * you should possibly get your own
- */
-char *api_key = "5a2d59b29160b55090e6bd9cd539519f";
-
 static size_t
 save_data (void *ptr, size_t size, size_t nmemb, void *data)
 {
@@ -86,6 +81,11 @@ upload (ImgurPrefs *prefs,
   struct curl_httppost *formpost=NULL;
   struct curl_httppost *lastptr=NULL;
 
+  if (!prefs)
+  {
+    g_error ("Preferences must be supplied to upload().");
+  }
+
   curl_formadd(&formpost,
                &lastptr,
                CURLFORM_COPYNAME, "image",
@@ -95,7 +95,7 @@ upload (ImgurPrefs *prefs,
   curl_formadd(&formpost,
                &lastptr,
                CURLFORM_COPYNAME, "key",
-               CURLFORM_COPYCONTENTS, api_key,
+               CURLFORM_COPYCONTENTS, prefs->key,
                CURLFORM_END);
  
   curl = curl_easy_init();
@@ -115,16 +115,7 @@ upload (ImgurPrefs *prefs,
 
       if (!imgur_url)
       {
-        if (prefs)
-        {
-          imgur_url = prefs->api;
-        }
-
-        if (!imgur_url)
-        {
-          g_warning ("Could not work out a URL to upload to");
-          return;
-        }
+	 imgur_url = prefs->api;
       }
     }
 

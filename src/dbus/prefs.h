@@ -16,6 +16,12 @@ typedef struct _ImgurPrefs {
  gchar *api;
 
 /**
+ * A string we use to identify ourselves
+ * as a client to the API.
+ */
+ gchar *key;
+
+/**
  * Whether we should store details of the
  * images we upload, so the user can come
  * back to them later.
