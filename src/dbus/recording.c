@@ -60,7 +60,7 @@ download_thumbnail (gchar *url,
 }
 
 void
-eog_recording_store(GHashTable *fields,
+imgur_recording_store(GHashTable *fields,
 		gchar *filename)
 {
 	gchar *group = get_field (fields, "image_hash");

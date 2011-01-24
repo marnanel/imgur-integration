@@ -19,7 +19,7 @@
  *                 NULL, in which case no source
  *                 filename will be stored.
  */
-void eog_recording_store(GHashTable *fields,
+void imgur_recording_store(GHashTable *fields,
 			gchar *filename);
 
 #endif /* !RECORDING_H */
