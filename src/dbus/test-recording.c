@@ -32,7 +32,7 @@ main (int argc, char **argv)
 	add_to_hash (hash, "delete_page", "http://imgur.com/delete/inQAUnHqeypbFs0");
 	add_to_hash (hash, "imgur_page", "http://imgur.com/10YnP");
 
-	eog_recording_store (hash, "/tmp/lsm.jpg");
+	imgur_recording_store (hash, "/tmp/lsm.jpg");
 }
 
 /* EOF test-recording.c */
