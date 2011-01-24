@@ -20,13 +20,7 @@
 #include <glib.h>
 #include <curl/curl.h>
 #include "upload.h"
-
-/*
- * you should possibly get your own
- */
-char *api_key = "5a2d59b29160b55090e6bd9cd539519f";
-
-#define IMGUR_DEFAULT_URL "http://imgur.com/api/upload.xml"
+#include "prefs.h"
 
 static size_t
 save_data (void *ptr, size_t size, size_t nmemb, void *data)
@@ -76,7 +70,8 @@ report_progress (gboolean (*progress)(char),
 #endif
 
 void
-upload (gchar *filename,
+upload (ImgurPrefs *prefs,
+	gchar *filename,
 	gboolean *success,
 	gchar **result,
 	gboolean (*progress)(char))
@@ -85,6 +80,11 @@ upload (gchar *filename,
   CURL *curl;
   struct curl_httppost *formpost=NULL;
   struct curl_httppost *lastptr=NULL;
+
+  if (!prefs)
+  {
+    g_error ("Preferences must be supplied to upload().");
+  }
 
   curl_formadd(&formpost,
                &lastptr,
@@ -95,7 +95,7 @@ upload (gchar *filename,
   curl_formadd(&formpost,
                &lastptr,
                CURLFORM_COPYNAME, "key",
-               CURLFORM_COPYCONTENTS, api_key,
+               CURLFORM_COPYCONTENTS, prefs->key,
                CURLFORM_END);
  
   curl = curl_easy_init();
@@ -107,15 +107,17 @@ upload (gchar *filename,
       return;
     }
 
+  *result = NULL;
+
   if (!imgur_url)
     {
       imgur_url = g_getenv ("IMGUR_URL");
 
       if (!imgur_url)
-        imgur_url = IMGUR_DEFAULT_URL;
+      {
+	 imgur_url = prefs->api;
+      }
     }
-
-  *result = NULL;
 
   curl_easy_setopt (curl, CURLOPT_URL,
 		   imgur_url);
@@ -161,26 +163,3 @@ upload (gchar *filename,
   *success = TRUE;
 }
 
-#ifdef TEST
-static gboolean
-progress (char percent)
-{
-  g_warning("Progress: %d%%", percent);
-  return TRUE;
-}
-
-int
-main()
-{
-  gchar *filename = "lsm.jpg";
-  gchar *result;
-  gboolean success;
-
-  upload (filename,
-	  &success,
-	  &result,
-	  progress);
-
-  g_warning ("Upload: %d %s", success, result);
-}
-#endif

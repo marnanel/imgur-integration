@@ -67,6 +67,32 @@ parse_commandline (int argc, char **argv)
 
 	    exit (EXIT_NO_ARGUMENT);
 	  }
+
+	/*
+ 	 * At this point, "filename" is non-NULL and
+ 	 * contains the filename we need. It's statically
+ 	 * allocated. It may be relative. We need it
+ 	 * to be allocated on the heap, and absolute.
+ 	 */
+	if (g_path_is_absolute (filename))
+	  {
+	    /*
+	     * lovely, just what we want.
+	     * Take a copy.
+	     */
+	    filename = g_strdup (filename);
+	  }
+	else
+	  {
+	    /* Attempt to canonicalise. */
+
+	    gchar *cwd = g_get_current_dir ();
+
+	    filename = g_build_filename (cwd,
+		filename, NULL);
+
+	    g_free (cwd);
+	  }
 }
 
 static void

@@ -6,6 +6,9 @@ service_in_files = com.imgur.service.in
 service_DATA = com.imgur.service
 CLEANFILES = com.imgur.service
 
+egconfdir = $(sysconfdir)/xdg/imgur
+egconf_DATA = imgur.conf
+
 com.imgur.service: com.imgur.service.in
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 

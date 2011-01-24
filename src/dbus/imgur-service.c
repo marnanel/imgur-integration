@@ -8,6 +8,7 @@
 #include "imgur-service-glue.h"
 #include "upload.h"
 #include "parse.h"
+#include "prefs.h"
 
 #define G_IMGUR_ERROR g_imgur_error_quark ()
 GQuark
@@ -105,6 +106,7 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
   gchar *message = NULL;
   GList *parsed, *cursor;
   gchar *temp = NULL;
+  ImgurPrefs *prefs = imgur_prefs_new ();
 
   *error = NULL;
 
@@ -113,7 +115,7 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
       filename += 5;
     }
 
-  upload (filename, &success, &message, NULL);
+  upload (prefs, filename, &success, &message, NULL);
 
   if (!success)
     {
@@ -128,6 +130,7 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
                     "%s", message);
 
        g_free (message);
+       g_free (prefs);
 
        return FALSE;
     }
@@ -155,6 +158,7 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
 
        g_list_free (parsed);
        g_free (message);
+       g_free (prefs);
 
        return TRUE;
     }
@@ -207,6 +211,7 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
 
        g_list_free (parsed);
        g_free (message);
+       g_free (prefs);
 
        return FALSE;
     }

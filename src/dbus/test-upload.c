@@ -17,19 +17,29 @@
  * 02111-1307, USA.
  */
 
-#ifndef UPLOAD_H
-#define UPLOAD_H 1
-
 #include <glib.h>
 #include <curl/curl.h>
+#include "upload.h"
 
-#include "prefs.h"
+static gboolean
+progress (char percent)
+{
+  g_print ("Progress: %d%%", percent);
+  return TRUE;
+}
 
-void
-upload (ImgurPrefs *prefs,
-	gchar *filename,
-	gboolean *success,
-	gchar **result,
-	gboolean (*progress)(char));
+int
+main()
+{
+  gchar *filename = "lsm.jpg";
+  gchar *result;
+  gboolean success;
 
-#endif
+  upload (NULL,
+          filename,
+	  &success,
+	  &result,
+	  progress);
+
+  g_warning ("Upload: %d %s", success, result);
+}

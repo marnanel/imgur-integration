@@ -35,5 +35,8 @@ Things which still need to be done
  * There should be a man page for the commandline
    application.
 
+ * There should be a corresponding imgur-like CGI
+   that people can run on their own servers.
+
 Patches are always welcomed.
 
