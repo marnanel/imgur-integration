@@ -1,6 +1,8 @@
 #include <glib-object.h>
 #include <time.h>
 #include <string.h>
+#include <stdio.h>
+#include <curl/curl.h>
 #include "recording.h"
 
 static gchar*
@@ -16,6 +18,45 @@ get_field (GHashTable *fields,
 	}
 
 	return g_strdup (g_value_get_string (value));
+}
+
+static int
+fwrite_handler (void *buffer, size_t size, size_t nmemb, void *stream)
+{
+	return fwrite (buffer, size, nmemb, stream);
+}
+
+static void
+download_thumbnail (gchar *url,
+	gchar *target_filename)
+{
+	CURL *curl = curl_easy_init();
+	CURLcode res;
+	FILE *target;
+
+	if (!curl)
+	{
+		g_warning ("Could not download.");
+		return;
+	}
+
+	target = fopen (target_filename, "wb");
+
+	if (!target)
+	{
+		g_warning ("Could not create target file.");
+		return;
+	}
+
+	curl_easy_setopt(curl, CURLOPT_URL, url);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,
+		(curl_write_callback) fwrite_handler);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, target);
+ 
+	res = curl_easy_perform(curl);
+
+	curl_easy_cleanup(curl);
+	fclose (target);
 }
 
 void
@@ -103,8 +144,13 @@ eog_recording_store(GHashTable *fields,
 
 	if (thumbnail)
 	{
-		/* FIXME */
-		g_print ("WOULD DOWNLOAD: %s\n", thumbnail);
+		gchar *final_component = strrchr (thumbnail, '/');
+		gchar *thumbnail_target =
+			g_build_filename (path,
+				final_component,
+				NULL);
+		download_thumbnail (thumbnail,
+			thumbnail_target);
 		g_free (thumbnail);
 	}
 
