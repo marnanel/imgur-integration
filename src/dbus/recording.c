@@ -44,7 +44,6 @@ eog_recording_store(GHashTable *fields,
 		"uploads.conf",
 		NULL);
 
-
 	g_key_file_load_from_file (keyfile,
 		inifile,
 		G_KEY_FILE_NONE,
@@ -93,7 +92,13 @@ eog_recording_store(GHashTable *fields,
 	temp = g_key_file_to_data (keyfile,
 		NULL, NULL);
 
-	g_print ("%s\n", temp);
+	g_mkdir_with_parents (path, 0700);
+
+	/* ignore the result */
+	g_file_set_contents (inifile,
+		temp,
+		-1, NULL);
+
 	g_free (temp);
 
 	if (thumbnail)
