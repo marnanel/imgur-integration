@@ -15,6 +15,8 @@ imgur_service_SOURCES = \
 	parse.h \
 	prefs.h \
 	prefs.c \
+	recording.h \
+	recording.c \
 	imgur-service-glue.h
 
 test_parse_SOURCES = \

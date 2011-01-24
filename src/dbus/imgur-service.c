@@ -9,6 +9,7 @@
 #include "upload.h"
 #include "parse.h"
 #include "prefs.h"
+#include "recording.h"
 
 #define G_IMGUR_ERROR g_imgur_error_quark ()
 GQuark
@@ -155,6 +156,12 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
                temp = cursor->data;
              }
           }
+
+       if (prefs->recording)
+       {
+         imgur_recording_store (*result,
+	        filename);
+       }
 
        g_list_free (parsed);
        g_free (message);
