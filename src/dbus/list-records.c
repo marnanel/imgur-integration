@@ -22,21 +22,19 @@ compare_entries (gconstpointer a, gconstpointer b)
 		return 0;
 }
 
-gchar**
-imgur_list_records (void)
+static gchar*
+get_path (void)
 {
-	gchar **result = NULL, **result_cursor;
-	GKeyFile *keyfile = g_key_file_new ();
-	gchar **entries, **cursor;
-	gchar *path, *filename;
-	GList *candidates = NULL, *candidate_cursor;
-	long count = 0;
-
-	path = g_build_filename (g_get_user_data_dir (),
+	return g_build_filename (g_get_user_data_dir (),
 			"imgur",
 			NULL);
+}
 
-	filename = g_build_filename (path,
+static GKeyFile*
+get_keyfile (const gchar* path)
+{
+	GKeyFile *keyfile = g_key_file_new ();
+	char *filename = g_build_filename (path,
 			"uploads.conf",
 			NULL);
 
@@ -46,12 +44,34 @@ imgur_list_records (void)
 				NULL)==FALSE)
 	{
 		g_key_file_free (keyfile);
-		g_free (path);
-		g_free (filename);
-		return NULL;
+		keyfile = NULL;
 	}
 
 	g_free (filename);
+
+	return keyfile;
+}
+
+gchar**
+imgur_list_records (void)
+{
+	gchar **result = NULL, **result_cursor;
+	GKeyFile *keyfile;
+	gchar **entries, **cursor;
+	gchar *path;
+	GList *candidates = NULL, *candidate_cursor;
+	long count = 0;
+
+	path = get_path ();
+	keyfile = get_keyfile (path);
+
+	if (!keyfile)
+	{
+		g_free (path);
+		result = g_malloc (sizeof (gchar* ));
+		*result = NULL;
+		return result;
+	}
 
 	entries = g_key_file_get_groups (keyfile, NULL);
 
@@ -164,3 +184,11 @@ imgur_list_records (void)
 
 	return result;
 }
+
+GHashTable*
+imgur_get_record (const gchar* record_name)
+{
+	g_print ("(Stub.)\n");
+	return NULL;
+}
+
