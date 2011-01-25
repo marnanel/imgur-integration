@@ -1,4 +1,6 @@
 #include "list-records.h"
+#include <string.h>
+#include <stdlib.h>
 
 typedef struct _ListEntry
 {
@@ -9,8 +11,147 @@ typedef struct _ListEntry
 gchar**
 imgur_list_records (void)
 {
-	gchar **result = NULL;
+	gchar **result = NULL, **result_cursor;
+	GKeyFile *keyfile = g_key_file_new ();
+	gchar **entries, **cursor;
+	gchar *path, *filename;
+	GList *candidates = NULL, *candidate_cursor;
+	long count = 0;
 
-	g_print ("Stub.\n");
+	path = g_build_filename (g_get_user_data_dir (),
+			"imgur",
+			NULL);
+
+	filename = g_build_filename (path,
+			"uploads.conf",
+			NULL);
+
+	if (g_key_file_load_from_file (keyfile,
+				filename,
+				G_KEY_FILE_NONE,
+				NULL)==FALSE)
+	{
+		g_key_file_free (keyfile);
+		g_free (path);
+		g_free (filename);
+		return NULL;
+	}
+
+	g_free (filename);
+
+	entries = g_key_file_get_groups (keyfile, NULL);
+
+	for (cursor=entries; *cursor; cursor++)
+	{
+		gchar *thumbnail,
+			*thumbnail_basename,
+			*time,
+			*our_thumbnail;
+		long timestamp;
+		ListEntry *entry;
+
+		g_print ("Considering %s\n", *cursor);
+
+		thumbnail = g_key_file_get_string (keyfile,
+			*cursor,
+			"small_thumbnail",
+			NULL);
+
+		if (!thumbnail)
+		{
+			g_warning ("Group %s has no thumbnail",
+				*cursor);
+			continue;
+		}
+
+		thumbnail_basename = strrchr (thumbnail, '/');
+
+		if (!thumbnail_basename)
+		{
+			g_warning ("Group %s has an invalid thumbnail",
+				*cursor);
+			continue;
+		}
+
+		thumbnail_basename++; /* bypass the slash */
+
+		g_print ("\tThumbnail is %s\n", thumbnail_basename);
+
+		/*
+ 		* FIXME: Here we check that *cursor is a prefix of
+ 		* thumbnail_basename, that the following character
+ 		* is a dot, and that there are no other dots.
+ 		*/
+
+		time = g_key_file_get_string (keyfile,
+			*cursor,
+			"time",
+			NULL);
+
+		if (time)
+		{
+			timestamp = atol (time);
+		}
+		else
+		{
+			/* well, it won't kill us */
+			timestamp = 0;
+		}
+
+		our_thumbnail = g_build_filename(path,
+			thumbnail_basename,
+			NULL);
+
+		if (!g_file_test (our_thumbnail,
+			G_FILE_TEST_IS_REGULAR))
+		{
+			g_warning ("Expected thumbnail %s but did not find it",
+				our_thumbnail);
+			g_free (time);
+			g_free (thumbnail);
+			g_free (our_thumbnail);
+		}
+
+		g_print ("\tTime is %ld, thumbnail is %s.\n", timestamp, our_thumbnail);
+
+		entry = g_malloc (sizeof (ListEntry));
+		entry->time = timestamp;
+		entry->filename = our_thumbnail;
+
+		count++;
+		candidates = g_list_prepend (candidates,
+			entry);
+
+		g_free (time);
+		g_free (thumbnail);
+	}
+
+	g_strfreev (entries);
+	g_free (path);
+
+	/* FIXME Sort candidates */
+
+	g_print ("Count is %ld\n", count);
+	result = g_malloc (sizeof (gchar*) * (count+1));
+	result[count] = NULL;
+	result_cursor = result;
+
+	/* Now go through and pick out the names */
+
+	for (candidate_cursor = candidates;
+		candidate_cursor;
+		candidate_cursor = candidate_cursor->next)
+	{
+		ListEntry *entry = (ListEntry*) candidate_cursor->data;
+
+		g_print ("One entry: %s\n", entry->filename);
+		*result_cursor = entry->filename;
+		g_free (entry);
+
+		result_cursor++;
+	}
+
+	/* FIXME Free candidates */
+
 	return result;
 }

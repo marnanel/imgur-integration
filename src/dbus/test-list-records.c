@@ -117,7 +117,31 @@ static void
 test1 (void)
 {
 	gchar **records = imgur_list_records();
-	/* stuff */
+	gchar *got = g_strdup("");
+	gchar **cursor;
+
+	for (cursor=records; *cursor; cursor++)
+	{
+		gchar *temp = got;
+		gchar *last_slash = strrchr (*cursor, '/');
+
+		if (last_slash)
+		{
+			last_slash++;
+		}
+		else
+		{
+			last_slash = *cursor;
+		}
+
+		got = g_strdup_printf ("%s[%s]",
+			got,
+			last_slash);
+		g_free (temp);
+	}
+
+	test (got, "[aa.jpg][bb.png][cc.jpg][dd.jpg]", "Sort thumbnails");
+	g_free (got);
 }
 
 int
