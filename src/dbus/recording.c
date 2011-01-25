@@ -144,13 +144,20 @@ imgur_recording_store(GHashTable *fields,
 
 	if (thumbnail)
 	{
-		gchar *final_component = strrchr (thumbnail, '/');
-		gchar *thumbnail_target =
-			g_build_filename (path,
-				final_component,
-				NULL);
-		download_thumbnail (thumbnail,
-			thumbnail_target);
+		gchar *extension = strrchr (thumbnail, '.');
+
+		if (extension)
+		{
+			gchar *thumbnail_target = g_strdup_printf (
+				"%s/%s%s",
+				path,
+				group,
+				extension);
+				
+			download_thumbnail (thumbnail,
+				thumbnail_target);
+
+		}
 		g_free (thumbnail);
 	}
 
