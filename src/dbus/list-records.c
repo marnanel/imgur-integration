@@ -160,7 +160,7 @@ imgur_list_records (void)
 		result_cursor++;
 	}
 
-	/* FIXME Free candidates */
+	g_list_free (candidates);
 
 	return result;
 }
