@@ -1,0 +1,6 @@
+Gehazi is a CGI system which can be run on
+a private webserver to present the same interface
+as imgur.com. This then allows you to use
+the imgur.com integration to upload to your
+own webserver.
+
