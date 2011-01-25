@@ -4,6 +4,7 @@ noinst_PROGRAMS = \
 	test-parse \
 	test-upload \
 	test-recording \
+	test-list-records \
 	test-prefs
 
 imgur_service_SOURCES = \
@@ -34,6 +35,11 @@ test_prefs_SOURCES = \
 	prefs.h \
 	test-prefs.c
 
+test_list_records_SOURCES = \
+	list-records.c \
+	list-records.h \
+	test-list-records.c
+
 imgur-service-glue.h: $(top_builddir)/data/imgur-service-glue.xml
 	$(DBUSBINDINGTOOL) --mode=glib-server --output=$@ --prefix=imgur_service $^
 BUILT_SOURCES = imgur-service-glue.h
@@ -48,6 +54,9 @@ test_upload_LDADD = \
 	$(ALL_LIBS)
 
 test_prefs_LDADD = \
+	$(ALL_LIBS)
+
+test_list_records_LDADD = \
 	$(ALL_LIBS)
 
 AM_CFLAGS = \
