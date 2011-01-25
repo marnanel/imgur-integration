@@ -8,6 +8,20 @@ typedef struct _ListEntry
 	long time;
 } ListEntry;
 
+static gint
+compare_entries (gconstpointer a, gconstpointer b)
+{
+	const ListEntry* aa = (const ListEntry*) a;
+	const ListEntry* bb = (const ListEntry*) b;
+
+	if (aa->time < bb->time)
+		return 1;
+	else if (aa->time < bb->time)
+		return -1;
+	else
+		return 0;
+}
+
 gchar**
 imgur_list_records (void)
 {
@@ -123,7 +137,8 @@ imgur_list_records (void)
 	g_strfreev (entries);
 	g_free (path);
 
-	/* FIXME Sort candidates */
+	candidates = g_list_sort (candidates,
+		compare_entries);
 
 	g_print ("Count is %ld\n", count);
 	result = g_malloc (sizeof (gchar*) * (count+1));
