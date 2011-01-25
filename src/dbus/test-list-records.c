@@ -140,7 +140,7 @@ test1 (void)
 		g_free (temp);
 	}
 
-	test (got, "[aa.jpg][bb.png][cc.jpg][dd.jpg]", "Sort thumbnails");
+	test (got, "[dd.jpg][cc.jpg][bb.png][aa.jpg]", "Sort thumbnails");
 	g_free (got);
 }
 
