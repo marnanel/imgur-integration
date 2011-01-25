@@ -44,7 +44,7 @@ imgur_list_records (void)
 	for (cursor=entries; *cursor; cursor++)
 	{
 		gchar *thumbnail,
-			*thumbnail_basename,
+			*thumbnail_extension,
 			*time,
 			*our_thumbnail;
 		long timestamp;
@@ -64,24 +64,16 @@ imgur_list_records (void)
 			continue;
 		}
 
-		thumbnail_basename = strrchr (thumbnail, '/');
+		thumbnail_extension = strrchr (thumbnail, '.');
 
-		if (!thumbnail_basename)
+		if (!thumbnail_extension)
 		{
 			g_warning ("Group %s has an invalid thumbnail",
 				*cursor);
 			continue;
 		}
 
-		thumbnail_basename++; /* bypass the slash */
-
-		g_print ("\tThumbnail is %s\n", thumbnail_basename);
-
-		/*
- 		* FIXME: Here we check that *cursor is a prefix of
- 		* thumbnail_basename, that the following character
- 		* is a dot, and that there are no other dots.
- 		*/
+		g_print ("\tThumbnail is %s\n", thumbnail_extension);
 
 		time = g_key_file_get_string (keyfile,
 			*cursor,
@@ -98,9 +90,11 @@ imgur_list_records (void)
 			timestamp = 0;
 		}
 
-		our_thumbnail = g_build_filename(path,
-			thumbnail_basename,
-			NULL);
+		our_thumbnail = g_strdup_printf (
+			"%s/%s%s",
+			path,
+			*cursor,
+			thumbnail_extension);
 
 		if (!g_file_test (our_thumbnail,
 			G_FILE_TEST_IS_REGULAR))
