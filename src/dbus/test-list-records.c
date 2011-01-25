@@ -8,6 +8,14 @@
 int failed = 0;
 int passed = 0;
 
+gchar *images[] = {
+	"aa.jpg",
+	"bb.png",
+	"cc.jpg",
+	"dd.jpg",
+	NULL
+};
+
 static void
 test (gchar *got, gchar *want, gchar *name)
 {
@@ -32,13 +40,6 @@ make_temp_dir (void)
 			);
 	gchar *imgurdir, *temp;
 	int fd;
-	gchar *images[] = {
-		"aa.jpg",
-		"bb.png",
-		"cc.jpg",
-		"dd.jpg",
-		NULL
-	};
 	gchar **cursor;
 
 	fd = mkstemp (tempdir);
@@ -114,6 +115,41 @@ make_temp_dir (void)
 }
 
 static void
+remove_temp_dir (const gchar* tempdir)
+{
+	gchar *temp;
+	gchar **cursor;
+
+	for (cursor=images; *cursor; cursor++)
+	{
+		temp = g_build_filename (
+			tempdir,
+			"imgur",
+			*cursor,
+			NULL);
+		unlink (temp);
+		g_free (temp);
+	}
+
+	temp = g_build_filename (
+			tempdir,
+			"imgur",
+			"uploads.conf",
+			NULL);
+	unlink (temp);
+	g_free (temp);
+
+	temp = g_build_filename (
+			tempdir,
+			"imgur",
+			NULL);
+	rmdir (temp);
+	g_free (temp);
+
+	rmdir (tempdir);
+}
+
+static void
 test1 (void)
 {
 	gchar **records = imgur_list_records();
@@ -151,7 +187,7 @@ main (int argc, char** argv)
 	
 	test1 ();
 
-	rmdir (temp_dir);
+	remove_temp_dir (temp_dir);
 	g_free (temp_dir);
 
 	g_print ("Passed: %d. Failed: %d.\n",
