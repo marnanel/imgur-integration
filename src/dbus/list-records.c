@@ -185,10 +185,56 @@ imgur_list_records (void)
 	return result;
 }
 
+static void
+add_hash_entry (GHashTable *hash,
+	gchar *key, gchar *value)
+{
+	g_print ("Setting %s=%s\n", 
+		key, value);
+}
+
 GHashTable*
 imgur_get_record (const gchar* record_name)
 {
+	gchar *path = get_path ();
+	GKeyFile *keyfile = get_keyfile (path);
+	GHashTable *result = g_hash_table_new (g_str_hash, g_str_equal);
+	gchar **keys, **cursor;
+	gchar *temp, *extension;
+
+	if (!keyfile)
+	{
+		g_free (path);
+		return result;
+	}
+
+	keys = g_key_file_get_keys (keyfile,
+		record_name,
+		NULL, NULL);
+
+	for (cursor = keys; *cursor; cursor++)
+	{
+		add_hash_entry (result,
+			*cursor,
+			g_key_file_get_value (keyfile,
+				record_name,
+				*cursor,
+				NULL));
+	}
+
+	extension = ".jpg"; /* FIXME */
+
+	temp = g_strdup_printf ("%s/%s.%s",
+		path,
+		record_name,
+		extension);
+
+	g_print ("What about %s ?\n", temp);
+
+	g_strfreev (keys);
+	g_free (temp);
+	g_free (path);
 	g_print ("(Stub.)\n");
-	return NULL;
+	return result;
 }
 

@@ -180,12 +180,19 @@ test1 (void)
 	g_free (got);
 }
 
+static void
+test2 (void)
+{
+	imgur_get_record ("aa");
+}
+
 int
 main (int argc, char** argv)
 {
 	gchar *temp_dir = make_temp_dir ();
 	
 	test1 ();
+	test2 ();
 
 	remove_temp_dir (temp_dir);
 	g_free (temp_dir);
