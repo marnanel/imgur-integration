@@ -27,7 +27,7 @@ struct _ImgurUploadClass
 GType imgur_upload_get_type (void);
 
 gboolean imgur_service_upload (ImgurUpload *upload, gchar *filename, GHashTable **result, GError **error);
-gboolean imgur_service_list_records (ImgurUpload *upload, GList **result, GError **error);
+gboolean imgur_service_list_records (ImgurUpload *upload, gchar ***result, GError **error);
 gboolean imgur_service_get_record (ImgurUpload *upload, gchar *record, GHashTable **result, GError **error);
 
 #endif

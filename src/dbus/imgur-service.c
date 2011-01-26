@@ -225,17 +225,19 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
 }
 
 gboolean
-imgur_service_list_records (ImgurUpload *iu, GList **result, GError **error)
+imgur_service_list_records (ImgurUpload *iu, gchar ***result, GError **error)
 {
 	/* stub */
-	return FALSE;
+	*result = NULL;
+	return TRUE;
 }
 
 gboolean
 imgur_service_get_record (ImgurUpload *iu, gchar *record, GHashTable **result, GError **error)
 {
 	/* stub */
-	return FALSE;
+	*result = g_hash_table_new (g_str_hash, g_str_equal);
+	return TRUE;
 }
 
 int
