@@ -235,7 +235,29 @@ imgur_service_list_records (ImgurUpload *iu, gchar ***result, GError **error)
 gboolean
 imgur_service_get_record (ImgurUpload *iu, gchar *record, GHashTable **result, GError **error)
 {
-	*result = imgur_get_record (record);
+	gchar *last_dot = strrchr (record, '.');
+	gchar *last_slash = strrchr (record, '/');
+	gchar *temp = NULL;
+
+	/*
+ 	 * Record IDs can be represented as filenames;
+	 * if we get one of these, it must be canonicalised
+	 * by removing the path and the extension.
+	 */
+
+	if (last_slash)
+		record = last_slash+1;
+
+	if (last_dot && last_dot > last_slash)
+	{
+		temp = g_strndup (record,
+			last_dot - record);
+	}
+
+	*result = imgur_get_record (temp? temp: record);
+
+	g_free (temp);
+
 	return TRUE;
 }
 
