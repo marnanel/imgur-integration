@@ -13,11 +13,13 @@ enum {
 	EXIT_ARGUMENT_PARSE_ERROR,
 	EXIT_BUS_ERROR,
 	EXIT_NO_ARGUMENT,
+	EXIT_NO_RECORD_ID,
 	EXIT_IMGUR_ERROR = 255
 };
 
 gboolean show_browser = FALSE;
 gboolean list_all_records = FALSE;
+gboolean list_some_records = FALSE;
 gchar *filename = NULL;
 
 DBusGConnection *connection = NULL;
@@ -29,6 +31,8 @@ static GOptionEntry entries[] =
 		"Launch browser if successful", NULL },
 	{ "list", 'l', 0, G_OPTION_ARG_NONE, &list_all_records,
 		"List previous uploads", NULL },
+	{ "records", 'r', 0, G_OPTION_ARG_NONE, &list_some_records,
+		"List details of a previous upload", NULL },
 	{ NULL }
 };
 
@@ -222,6 +226,29 @@ show_records (void)
 	
 }
 
+static void
+show_some_records (void)
+{
+	GError *error = NULL;
+	GHashTable *hash = NULL;
+
+	if (com_imgur_get_record (uploader, filename, &hash, &error))
+	{
+		g_hash_table_foreach (hash,
+	          print_one_line,
+	          NULL);
+
+		exit (EXIT_OK);
+	}
+	else
+	{
+		fprintf (stderr, "imgur: error in listing records: %s\n",
+			error->message);
+		g_error_free (error);
+		exit (EXIT_IMGUR_ERROR);
+	}
+}
+	
 int
 main (int argc, char **argv)
 {
@@ -235,7 +262,16 @@ main (int argc, char **argv)
 		show_records ();
 
 	if (filename)
-		make_call ();
+	{
+		if (list_some_records)
+		{
+			show_some_records ();
+		}
+		else
+		{
+			make_call ();
+		}
+	}
 }
 
 /* EOF imgur.c */
