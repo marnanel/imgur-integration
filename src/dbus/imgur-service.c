@@ -224,6 +224,20 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
     }
 }
 
+gboolean
+imgur_service_list_records (ImgurUpload *iu, GList **result, GError **error)
+{
+	/* stub */
+	return FALSE;
+}
+
+gboolean
+imgur_service_get_record (ImgurUpload *iu, gchar *record, GHashTable **result, GError **error)
+{
+	/* stub */
+	return FALSE;
+}
+
 int
 main (int argc, char **argv)
 {

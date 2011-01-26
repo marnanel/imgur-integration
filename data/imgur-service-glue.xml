@@ -5,10 +5,17 @@
   <interface name="com.imgur">
 
     <method name="Upload">
-
       <arg type="s" name="image" direction="in" />
       <arg type="a{sv}" name="d_ret" direction="out" />
+    </method>
 
+    <method name="ListRecords">
+      <arg type="(s)" name="d_ret" direction="out" />
+    </method>
+
+    <method name="GetRecord">
+      <arg type="s" name="record" direction="in" />
+      <arg type="a{sv}" name="d_ret" direction="out" />
     </method>
 
   </interface>
