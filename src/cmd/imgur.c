@@ -17,7 +17,7 @@ enum {
 };
 
 gboolean show_browser = FALSE;
-gboolean list_records = FALSE;
+gboolean list_all_records = FALSE;
 gchar *filename = NULL;
 
 DBusGConnection *connection = NULL;
@@ -27,7 +27,7 @@ static GOptionEntry entries[] =
 {
 	{ "browser", 'b', 0, G_OPTION_ARG_NONE, &show_browser,
 		"Launch browser if successful", NULL },
-	{ "list", 'l', 0, G_OPTION_ARG_NONE, &list_records,
+	{ "list", 'l', 0, G_OPTION_ARG_NONE, &list_all_records,
 		"List previous uploads", NULL },
 	{ NULL }
 };
@@ -60,7 +60,7 @@ parse_commandline (int argc, char **argv)
 	    filename += 5;
 	  }
 
-	if (!filename && !list_records)
+	if (!filename && !list_all_records)
 	  {
 	    gchar *help = g_option_context_get_help (context,
 		FALSE, NULL);
@@ -231,7 +231,7 @@ main (int argc, char **argv)
 
 	get_proxy ();
 
-	if (list_records)
+	if (list_all_records)
 		show_records ();
 
 	if (filename)
