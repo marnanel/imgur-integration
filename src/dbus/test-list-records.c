@@ -110,8 +110,6 @@ make_temp_dir (void)
 		}
 	g_free (temp);
 
-	g_print ("%s\n", tempdir);
-
 	return tempdir;
 }
 

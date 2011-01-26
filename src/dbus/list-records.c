@@ -85,8 +85,6 @@ imgur_list_records (void)
 		long timestamp;
 		ListEntry *entry;
 
-		g_print ("Considering %s\n", *cursor);
-
 		thumbnail = g_key_file_get_string (keyfile,
 			*cursor,
 			"small_thumbnail",
@@ -107,8 +105,6 @@ imgur_list_records (void)
 				*cursor);
 			continue;
 		}
-
-		g_print ("\tThumbnail is %s\n", thumbnail_extension);
 
 		time = g_key_file_get_string (keyfile,
 			*cursor,
@@ -134,14 +130,10 @@ imgur_list_records (void)
 		if (!g_file_test (our_thumbnail,
 			G_FILE_TEST_IS_REGULAR))
 		{
-			g_warning ("Expected thumbnail %s but did not find it",
-				our_thumbnail);
 			g_free (time);
 			g_free (thumbnail);
 			g_free (our_thumbnail);
 		}
-
-		g_print ("\tTime is %ld, thumbnail is %s.\n", timestamp, our_thumbnail);
 
 		entry = g_malloc (sizeof (ListEntry));
 		entry->time = timestamp;
@@ -161,7 +153,6 @@ imgur_list_records (void)
 	candidates = g_list_sort (candidates,
 		compare_entries);
 
-	g_print ("Count is %ld\n", count);
 	result = g_malloc (sizeof (gchar*) * (count+1));
 	result[count] = NULL;
 	result_cursor = result;
@@ -174,7 +165,6 @@ imgur_list_records (void)
 	{
 		ListEntry *entry = (ListEntry*) candidate_cursor->data;
 
-		g_print ("One entry: %s\n", entry->filename);
 		*result_cursor = entry->filename;
 		g_free (entry);
 
@@ -245,8 +235,6 @@ imgur_get_record (const gchar* record_name)
 		path,
 		record_name,
 		extension);
-
-	g_print ("What about %s ?\n", temp);
 
 	if (g_file_test (temp,
 		G_FILE_TEST_IS_REGULAR))
