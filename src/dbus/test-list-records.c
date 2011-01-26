@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <glib-object.h>
 #include "list-records.h"
 
 int failed = 0;
@@ -189,7 +190,11 @@ test2 (void)
 int
 main (int argc, char** argv)
 {
-	gchar *temp_dir = make_temp_dir ();
+	gchar *temp_dir;
+
+	g_type_init ();
+
+	temp_dir = make_temp_dir ();
 	
 	test1 ();
 	test2 ();

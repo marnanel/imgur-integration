@@ -1,4 +1,5 @@
 #include "list-records.h"
+#include <glib-object.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -185,12 +186,17 @@ imgur_list_records (void)
 	return result;
 }
 
+/* A very similar function appears in imgur-service.c;
+ * we should merge them.
+ */
 static void
 add_hash_entry (GHashTable *hash,
-	gchar *key, gchar *value)
+	const gchar *key, const gchar *value)
 {
-	g_print ("Setting %s=%s\n", 
-		key, value);
+	GValue *v = g_malloc0 (sizeof (GValue) );
+	g_value_init (v, G_TYPE_STRING);
+	g_value_set_string (v, value);
+	g_hash_table_insert (hash, g_strdup(key), v);
 }
 
 GHashTable*
@@ -200,7 +206,7 @@ imgur_get_record (const gchar* record_name)
 	GKeyFile *keyfile = get_keyfile (path);
 	GHashTable *result = g_hash_table_new (g_str_hash, g_str_equal);
 	gchar **keys, **cursor;
-	gchar *temp, *extension;
+	gchar *temp, *extension = NULL;
 
 	if (!keyfile)
 	{
@@ -214,27 +220,45 @@ imgur_get_record (const gchar* record_name)
 
 	for (cursor = keys; *cursor; cursor++)
 	{
-		add_hash_entry (result,
-			*cursor,
-			g_key_file_get_value (keyfile,
+		gchar *value = g_key_file_get_string (keyfile,
 				record_name,
 				*cursor,
-				NULL));
+				NULL);
+
+		add_hash_entry (result,
+			*cursor,
+			value);
+
+		if (strcmp (*cursor, "small_thumbnail")==0)
+		{
+			extension = strrchr (value, '.');
+		}
 	}
 
-	extension = ".jpg"; /* FIXME */
-
-	temp = g_strdup_printf ("%s/%s.%s",
+	temp = g_strdup_printf ("%s/%s%s",
 		path,
 		record_name,
 		extension);
 
 	g_print ("What about %s ?\n", temp);
 
+	if (g_file_test (temp,
+		G_FILE_TEST_IS_REGULAR))
+	{
+		add_hash_entry (result,
+			"local_thumbnail",
+			temp);
+	}
+
+	/* Since we took it out before storage: */
+	add_hash_entry (result,
+		"image_hash",
+		record_name);
+
 	g_strfreev (keys);
 	g_free (temp);
 	g_free (path);
-	g_print ("(Stub.)\n");
+
 	return result;
 }
 
