@@ -18,6 +18,10 @@ enum {
 };
 
 /*
+ * FIXME: the "time" column needs strftime()ing.
+ */
+
+/*
  * FIXME: show_browser SHOULD work when
  * we are using list_some_records as well.
  */
