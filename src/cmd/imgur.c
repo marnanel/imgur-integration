@@ -75,7 +75,7 @@ parse_commandline (int argc, char **argv)
 	    exit (EXIT_NO_ARGUMENT);
 	  }
 
-	if (filename)
+	if (filename && !list_some_records)
 	{
 		/*
 		 * At this point, "filename" is non-NULL and
