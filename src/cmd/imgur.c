@@ -17,6 +17,10 @@ enum {
 	EXIT_IMGUR_ERROR = 255
 };
 
+/*
+ * FIXME: show_browser SHOULD work when
+ * we are using list_some_records as well.
+ */
 gboolean show_browser = FALSE;
 gboolean list_all_records = FALSE;
 gboolean list_some_records = FALSE;
