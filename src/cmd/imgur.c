@@ -133,13 +133,42 @@ get_proxy (void)
 }
 
 static void
-print_one_line (gpointer key, gpointer value, gpointer dummy)
+print_one_line (gpointer key, gpointer value, gpointer identifier)
 {
 	GValue *v = (GValue*) value;
 
-	g_print ("%s\t%s\n",
+	g_print ("%s\t%s\t%s\n",
+	  identifier,
 	  (gchar*) key,
 	  g_value_get_string (v));
+}
+
+static void
+print_hash_table (GHashTable *hash)
+{
+	GValue *v = g_hash_table_lookup (hash,
+		"image_hash");
+	gchar *identifier = "";
+
+	if (v)
+		identifier = (gchar*) g_value_get_string(v);
+
+	g_hash_table_foreach (hash,
+			print_one_line,
+			identifier);
+
+	if (g_hash_table_size (hash)==0)
+	{
+		/*
+ 		 * No such record.  But
+		 * output a dummy record
+		 * so that the user knows
+		 * we did actually look.
+		 */
+
+		/* FIXME it needs the image hash column */
+		g_print ("???\tfound\t0\n");
+	}
 }
 
 static void
@@ -169,9 +198,7 @@ perform_upload (void)
 	          }
 	      }
 
-	    g_hash_table_foreach (result,
-	      print_one_line,
-	      NULL);
+            print_hash_table (result);
 
 	    exit (EXIT_OK);
 	  }
@@ -225,9 +252,7 @@ show_some_records (void)
 
 	if (com_imgur_get_record (uploader, filename, &hash, &error))
 	{
-		g_hash_table_foreach (hash,
-	          print_one_line,
-	          NULL);
+		print_hash_table (hash);
 
 		exit (EXIT_OK);
 	}
