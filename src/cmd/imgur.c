@@ -17,6 +17,7 @@ enum {
 };
 
 gboolean show_browser = FALSE;
+gboolean list_records = FALSE;
 gchar *filename = NULL;
 
 DBusGConnection *connection = NULL;
@@ -26,6 +27,8 @@ static GOptionEntry entries[] =
 {
 	{ "browser", 'b', 0, G_OPTION_ARG_NONE, &show_browser,
 		"Launch browser if successful", NULL },
+	{ "list", 'l', 0, G_OPTION_ARG_NONE, &list_records,
+		"List previous uploads", NULL },
 	{ NULL }
 };
 
@@ -57,7 +60,7 @@ parse_commandline (int argc, char **argv)
 	    filename += 5;
 	  }
 
-	if (!filename)
+	if (!filename && !list_records)
 	  {
 	    gchar *help = g_option_context_get_help (context,
 		FALSE, NULL);
@@ -68,31 +71,35 @@ parse_commandline (int argc, char **argv)
 	    exit (EXIT_NO_ARGUMENT);
 	  }
 
-	/*
- 	 * At this point, "filename" is non-NULL and
- 	 * contains the filename we need. It's statically
- 	 * allocated. It may be relative. We need it
- 	 * to be allocated on the heap, and absolute.
- 	 */
-	if (g_path_is_absolute (filename))
-	  {
-	    /*
-	     * lovely, just what we want.
-	     * Take a copy.
-	     */
-	    filename = g_strdup (filename);
-	  }
-	else
-	  {
-	    /* Attempt to canonicalise. */
+	if (filename)
+	{
+		/*
+		 * At this point, "filename" is non-NULL and
+		 * contains the filename we need. It's statically
+		 * allocated. It may be relative. We need it
+		 * to be allocated on the heap, and absolute.
+		 */
 
-	    gchar *cwd = g_get_current_dir ();
+		if (g_path_is_absolute (filename))
+		{
+			/*
+			 * lovely, just what we want.
+			 * Take a copy.
+			 */
+			filename = g_strdup (filename);
+		}
+		else
+		{
+			/* Attempt to canonicalise. */
 
-	    filename = g_build_filename (cwd,
-		filename, NULL);
+			gchar *cwd = g_get_current_dir ();
 
-	    g_free (cwd);
-	  }
+			filename = g_build_filename (cwd,
+					filename, NULL);
+
+			g_free (cwd);
+		}
+	}
 }
 
 static void
@@ -183,6 +190,38 @@ make_call (void)
 	  }
 }
 
+static void
+show_records (void)
+{
+	GError *error = NULL;
+	gchar **list = NULL;
+
+	if (com_imgur_list_records (uploader, &list, &error))
+	{
+		gchar **cursor;
+
+		for (cursor=list; *cursor; cursor++)
+		{
+			g_print ("%s\n", *cursor);
+		}
+
+		if (!*list)
+		{
+			fprintf (stderr, "(no records to list)\n");
+		}
+
+		g_strfreev (cursor);
+	}
+	else
+	{
+		fprintf (stderr, "imgur: error in listing records: %s\n",
+			error->message);
+		g_error_free (error);
+		exit (EXIT_IMGUR_ERROR);
+	}
+	
+}
+
 int
 main (int argc, char **argv)
 {
@@ -192,7 +231,11 @@ main (int argc, char **argv)
 
 	get_proxy ();
 
-	make_call ();
+	if (list_records)
+		show_records ();
+
+	if (filename)
+		make_call ();
 }
 
 /* EOF imgur.c */
