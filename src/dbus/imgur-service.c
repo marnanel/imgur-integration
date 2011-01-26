@@ -235,8 +235,7 @@ imgur_service_list_records (ImgurUpload *iu, gchar ***result, GError **error)
 gboolean
 imgur_service_get_record (ImgurUpload *iu, gchar *record, GHashTable **result, GError **error)
 {
-	/* stub */
-	*result = g_hash_table_new (g_str_hash, g_str_equal);
+	*result = imgur_get_record (record);
 	return TRUE;
 }
 
