@@ -210,7 +210,7 @@ show_records (void)
 			fprintf (stderr, "(no records to list)\n");
 		}
 
-		g_strfreev (cursor);
+		g_strfreev (list);
 	}
 	else
 	{
