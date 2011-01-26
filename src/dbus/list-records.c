@@ -133,6 +133,7 @@ imgur_list_records (void)
 			g_free (time);
 			g_free (thumbnail);
 			g_free (our_thumbnail);
+			continue;
 		}
 
 		entry = g_malloc (sizeof (ListEntry));
