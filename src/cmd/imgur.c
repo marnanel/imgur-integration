@@ -170,17 +170,9 @@ perform_upload (void)
 	          }
 	      }
 
-	    /*
-	     * note: this is not the "else" case of the
-	     * block above.
-	     */
-
-	    if (!show_browser)
-	      {
-	        g_hash_table_foreach (result,
-	          print_one_line,
-	          NULL);
-	      }
+	    g_hash_table_foreach (result,
+	      print_one_line,
+	      NULL);
 
 	    exit (EXIT_OK);
 	  }
