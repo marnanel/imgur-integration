@@ -209,6 +209,15 @@ imgur_get_record (const gchar* record_name)
 		record_name,
 		NULL, NULL);
 
+	g_warning ("Record is [%s]\n", record_name);
+
+	if (!keys)
+	{
+		g_free (path);
+		g_key_file_free (keyfile);
+		return result;
+	}
+
 	for (cursor = keys; *cursor; cursor++)
 	{
 		gchar *value = g_key_file_get_string (keyfile,
