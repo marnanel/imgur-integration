@@ -10,7 +10,7 @@
     </method>
 
     <method name="ListRecords">
-      <arg type="(s)" name="d_ret" direction="out" />
+      <arg type="as" name="d_ret" direction="out" />
     </method>
 
     <method name="GetRecord">
