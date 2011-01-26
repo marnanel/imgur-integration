@@ -209,8 +209,6 @@ imgur_get_record (const gchar* record_name)
 		record_name,
 		NULL, NULL);
 
-	g_warning ("Record is [%s]\n", record_name);
-
 	if (!keys)
 	{
 		g_free (path);
