@@ -23,9 +23,6 @@ Things which still need to be done
  * The DBus interface should allow access to more of
    the imgur API, such as deletion.
 
- * We should record the deletion hash, and have
-   some kind of app to delete images.
-
  * imgur now supports login (for galleries), and
    we should also support this.
 
@@ -37,6 +34,14 @@ Things which still need to be done
 
  * There should be a corresponding imgur-like CGI
    that people can run on their own servers.
+
+ * There should be a GUI version of the commandline
+   application.
+
+ * We should have an option to prevent uploading
+   the same image twice.
+
+ * Translations, translations, translations.
 
 Patches are always welcomed.
 
