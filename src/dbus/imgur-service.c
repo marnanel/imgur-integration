@@ -10,6 +10,7 @@
 #include "parse.h"
 #include "prefs.h"
 #include "recording.h"
+#include "list-records.h"
 
 #define G_IMGUR_ERROR g_imgur_error_quark ()
 GQuark
@@ -227,8 +228,7 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
 gboolean
 imgur_service_list_records (ImgurUpload *iu, gchar ***result, GError **error)
 {
-	/* stub */
-	*result = NULL;
+	*result = imgur_list_records ();
 	return TRUE;
 }
 
