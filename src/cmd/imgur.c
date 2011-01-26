@@ -163,11 +163,6 @@ perform_upload (void)
 	                show_browser = FALSE;
 	              }
 	          }
-	        else
-	          {
-	            /* it failed; just print details */
-	            show_browser = FALSE;
-	          }
 	      }
 
 	    g_hash_table_foreach (result,
