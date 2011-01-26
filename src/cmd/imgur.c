@@ -182,7 +182,7 @@ perform_upload (void)
 }
 
 static void
-show_records (void)
+show_all_records (void)
 {
 	GError *error = NULL;
 	gchar **list = NULL;
@@ -246,7 +246,7 @@ main (int argc, char **argv)
 	get_proxy ();
 
 	if (list_all_records)
-		show_records ();
+		show_all_records ();
 
 	if (filename)
 	{
