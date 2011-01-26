@@ -14,34 +14,9 @@ src/cmd/
 src/eog/
    An Eye of Gnome (eog) plugin.
 
-Things which still need to be done
-==================================
+There is much more information on the wiki, which is at
+<https://github.com/tthurman/imgur-integration/wiki>.
 
- * The unit and integration tests need finishing
-   and integrating.
-
- * The DBus interface should allow access to more of
-   the imgur API, such as deletion.
-
- * imgur now supports login (for galleries), and
-   we should also support this.
-
- * There was a half-written Maemo libsharing service;
-   this should be rescued and integrated.
-
- * There should be a man page for the commandline
-   application.
-
- * There should be a corresponding imgur-like CGI
-   that people can run on their own servers.
-
- * There should be a GUI version of the commandline
-   application.
-
- * We should have an option to prevent uploading
-   the same image twice.
-
- * Translations, translations, translations.
-
-Patches are always welcomed.
-
+There used to be a TODO section in this file, but it has
+been replaced by an issue tracker. You may find it at
+<https://github.com/tthurman/imgur-integration/issues>.
