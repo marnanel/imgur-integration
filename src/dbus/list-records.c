@@ -235,6 +235,12 @@ imgur_get_record (const gchar* record_name)
 		}
 	}
 
+	if (!extension)
+	{
+		/* ugh */
+		extension = ".jpg";
+	}
+
 	temp = g_strdup_printf ("%s/%s%s",
 		path,
 		record_name,
