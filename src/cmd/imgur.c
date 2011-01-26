@@ -139,7 +139,7 @@ print_one_line (gpointer key, gpointer value, gpointer dummy)
 }
 
 static void
-make_call (void)
+perform_upload (void)
 {
 	GError *error = NULL;
 	GHashTable *result = NULL;
@@ -269,7 +269,7 @@ main (int argc, char **argv)
 		}
 		else
 		{
-			make_call ();
+			perform_upload ();
 		}
 	}
 }
