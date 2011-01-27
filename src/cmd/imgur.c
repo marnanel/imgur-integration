@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <glib.h>
 #include <string.h>
+#include <time.h>
 #include <dbus/dbus-glib-bindings.h>
 #include "../../data/imgur-client-glue.h"
 
@@ -164,6 +165,27 @@ launch_browser (const char* url)
 
 }
 
+static gchar*
+format_time (const gchar* clock)
+{
+	time_t time_int = atol (clock);
+	struct tm time_struct;
+	gchar buffer[2048];
+
+	if (time_int==0)
+	{
+		return g_strdup (clock);
+	}
+
+	localtime_r (&time_int, &time_struct);
+
+	strftime (buffer, sizeof (buffer),
+		"%Y-%m-%d %H:%M:%S",
+                &time_struct);
+
+	return g_strdup (buffer);
+}
+
 /**
  * Prints one line of a hash table. Ancillary to print_hash_table().
  *
@@ -181,11 +203,19 @@ print_one_line (gpointer key, gpointer value, gpointer identifier)
 	GValue *v = (GValue*) value;
 	const gchar *key_str = (gchar*) key;
 	const gchar *value_str = g_value_get_string (value);
+	gchar *temp = NULL;
+
+	if (strcmp (key_str, "time")==0)
+	{
+		temp = format_time (value_str);
+	}
 
 	g_print ("%s\t%s\t%s\n",
 	  identifier,
 	  key_str,
-	  value_str);
+	  temp? temp: value_str);
+
+	g_free (temp);
 
 	if (show_browser &&
 		strcmp (key_str, "imgur_page")==0)
