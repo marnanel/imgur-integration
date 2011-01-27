@@ -148,9 +148,26 @@ print_one_line (gpointer key, gpointer value, gpointer identifier)
 }
 
 static void
+launch_browser (const char* url)
+{
+	GError *error = NULL;
+	gchar *command_line = g_strdup_printf ("xdg-open %s",
+			url);
+
+	if (!g_spawn_command_line_async (command_line, &error))
+	{
+		g_warning ("Failed to spawn browser: %s", error->message);
+		g_error_free (error);
+		error = NULL;
+	}
+
+}
+
+static void
 print_hash_table (GHashTable *hash,
 	gchar *title)
 {
+	GError *error = NULL;
 	if (!title)
 	{
 		/*
@@ -203,16 +220,7 @@ perform_upload (void)
 
 		if (url)
 	          {
-	            gchar *command_line = g_strdup_printf ("xdg-open %s",
-	              g_value_get_string (url));
-
-		    if (!g_spawn_command_line_async (command_line, &error))
-	              {
-	                g_warning ("Failed to spawn browser: %s", error->message);
-			g_error_free (error);
-	                error = NULL;
-	                show_browser = FALSE;
-	              }
+			launch_browser (g_value_get_string (url));
 	          }
 	      }
 
