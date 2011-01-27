@@ -21,10 +21,6 @@ enum {
  * FIXME: the "time" column needs strftime()ing.
  */
 
-/*
- * FIXME: show_browser SHOULD work when
- * we are using list_some_records as well.
- */
 gboolean show_browser = FALSE;
 gboolean list_all_records = FALSE;
 gboolean list_some_records = FALSE;
@@ -44,6 +40,13 @@ static GOptionEntry entries[] =
 	{ NULL }
 };
 
+/**
+ * Parses the commandline.
+ *
+ * \param argc  The number of commandline arguments, plus one.
+ * \param argv  The name of the program, followed by the
+ *              commandline arguments.
+ */
 static void
 parse_commandline (int argc, char **argv)
 {
@@ -114,6 +117,9 @@ parse_commandline (int argc, char **argv)
 	}
 }
 
+/**
+ * Sets up the global variables concerned with DBus.
+ */
 static void
 get_proxy (void)
 {
@@ -136,6 +142,12 @@ get_proxy (void)
 		"com.imgur");
 }
 
+/**
+ * Launches the web browser. If that fails, prints an error
+ * to stderr.
+ *
+ * \param url  The address to send the browser to.
+ */
 static void
 launch_browser (const char* url)
 {
@@ -152,17 +164,50 @@ launch_browser (const char* url)
 
 }
 
+/**
+ * Prints one line of a hash table. Ancillary to print_hash_table().
+ *
+ * \param key  The key of the hash; a cast char*.
+ *             If this is "imgur_page", and the global variable
+ *             show_browser is TRUE, this has the side-effect of
+ *             launching the browser on the URL given in value.
+ * \param value  The value of the hash; a cast GValue containing
+ *               a string.
+ * \param identifier  An identifier for the whole hash.
+ */
 static void
 print_one_line (gpointer key, gpointer value, gpointer identifier)
 {
 	GValue *v = (GValue*) value;
+	const gchar *key_str = (gchar*) key;
+	const gchar *value_str = g_value_get_string (value);
 
 	g_print ("%s\t%s\t%s\n",
 	  identifier,
-	  (gchar*) key,
-	  g_value_get_string (v));
+	  key_str,
+	  value_str);
+
+	if (show_browser &&
+		strcmp (key_str, "imgur_page")==0)
+	{
+		launch_browser (value_str);
+	}
 }
 
+/**
+ * Prints the contents of a hash table mapping
+ * strings to GValues containing strings.
+ * See print_one_line() for special cases.
+ * If the hash is null, a dummy record mapping
+ * "found" to "0" is printed.
+ *
+ * \param hash   The hash whose contents should
+ *               be printed.
+ * \param title  A title for the hash, to be
+ *               printed in the first column.
+ *               If this is NULL, it's guessed
+ *               from the contents of the hash.
+ */
 static void
 print_hash_table (GHashTable *hash,
 	gchar *title)
@@ -206,6 +251,9 @@ print_hash_table (GHashTable *hash,
 	}
 }
 
+/**
+ * Uploads an image, according to the commandline options.
+ */
 static void
 perform_upload (void)
 {
@@ -238,6 +286,9 @@ perform_upload (void)
 	  }
 }
 
+/**
+ * Prints an identifier for every known record to standard output.
+ */
 static void
 show_all_records (void)
 {
@@ -270,6 +321,9 @@ show_all_records (void)
 	
 }
 
+/**
+ * Prints all details of one record to standard output.
+ */
 static void
 show_some_records (void)
 {
