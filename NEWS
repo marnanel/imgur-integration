@@ -1,3 +1,14 @@
+2011-01-27 - v0.4.0 - "Stieglitz"
+   - Configuration files.
+   - A man page.
+   - Recording of details of previous uploads, API to check them,
+     and commandline switches to access this API.
+   - Details are always printed to stdout, even if the browser is
+     launched.
+   - Extra column in stdout details, giving the ID of the whole record.
+   - More tests.
+   - Bugfixes.
+
 2011-01-22 - v0.3.0 - "Daguerre"
    - Relative pathnames may now be passed to the commandline app.
    - Some unit tests split out (but not yet made into a comprehensive
