@@ -18,10 +18,6 @@ enum {
 	EXIT_IMGUR_ERROR = 255
 };
 
-/*
- * FIXME: the "time" column needs strftime()ing.
- */
-
 gboolean show_browser = FALSE;
 gboolean list_all_records = FALSE;
 gboolean list_some_records = FALSE;
