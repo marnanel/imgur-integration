@@ -165,6 +165,14 @@ launch_browser (const char* url)
 
 }
 
+/**
+ * Returns a time in human-readable format.
+ *
+ * \param clock  A decimal number of seconds since the epoch.
+ * \return  The same time, expressed in human-readable format;
+ *          or a copy of the same string if that string was invalid.
+ *          Either way, it's the user's responsibility to free it.
+ */
 static gchar*
 format_time (const gchar* clock)
 {
