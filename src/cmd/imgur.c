@@ -137,17 +137,6 @@ get_proxy (void)
 }
 
 static void
-print_one_line (gpointer key, gpointer value, gpointer identifier)
-{
-	GValue *v = (GValue*) value;
-
-	g_print ("%s\t%s\t%s\n",
-	  identifier,
-	  (gchar*) key,
-	  g_value_get_string (v));
-}
-
-static void
 launch_browser (const char* url)
 {
 	GError *error = NULL;
@@ -161,6 +150,17 @@ launch_browser (const char* url)
 		error = NULL;
 	}
 
+}
+
+static void
+print_one_line (gpointer key, gpointer value, gpointer identifier)
+{
+	GValue *v = (GValue*) value;
+
+	g_print ("%s\t%s\t%s\n",
+	  identifier,
+	  (gchar*) key,
+	  g_value_get_string (v));
 }
 
 static void
