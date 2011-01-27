@@ -2,7 +2,11 @@ man_MANS = \
 	imgur.1
 
 BUILT_FILES=com.imgur.service
-EXTRA_DIST=com.imgur.service.in imgur-service-glue.xml $(man_MANS)
+EXTRA_DIST= \
+	com.imgur.service.in \
+	imgur-service-glue.xml \
+	imgur.conf \
+	$(man_MANS)
 
 servicedir = $(datadir)/dbus-1/services
 service_in_files = com.imgur.service.in
