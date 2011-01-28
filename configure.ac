@@ -6,7 +6,14 @@ AC_CONFIG_MACRO_DIR([m4])
 
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-AM_INIT_AUTOMAKE([1.9 -Wno-portability])
+AM_INIT_AUTOMAKE([1.8 -Wno-portability])
+
+dnl ----
+
+dnl We don't want static libraries.
+AC_DISABLE_STATIC()
+
+dnl ----
 
 AM_PROG_LIBTOOL
 AM_CONFIG_HEADER(config.h)
@@ -27,17 +34,18 @@ AC_ARG_ENABLE(libsocialweb,
 
 AC_ARG_ENABLE(eog,
   AC_HELP_STRING([--disable-eog],
-                 [don't build the Eye of Gnome plugin]),,
+		 [don't build the Eye of Gnome plugin]),,
   enable_eog=yes)
 
-dnl ----
-
-dnl We don't want static libraries.
-LT_INIT([disable-static])
+AC_ARG_ENABLE(libsharing,
+  AC_HELP_STRING([--enable-libsharing],
+                 [build Maemo libsharing plugin]),,
+  enable_libsharing=no)
 
 dnl ----
 
 AM_CONDITIONAL(WANT_EOG, test x$enable_eog = xyes)
+AM_CONDITIONAL(WANT_LIBSHARING, test x$enable_libsharing != xno)
 
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.4, gobject-2.0 >= 2.4])
 AC_SUBST(GLIB_CFLAGS)
@@ -59,6 +67,24 @@ if test x$enable_eog = xyes; then
     AC_SUBST(EOG_LIBS)
 fi
 
+if test x$enable_libsharing = xyes; then
+    AC_DEFINE(WANT_LIBSHARING,1,[Build with libsharing support])
+
+    PKG_CHECK_MODULES(LIBSHARING, [libsharing])
+    AC_SUBST(LIBSHARING_CFLAGS)
+    AC_SUBST(LIBSHARING_LIBS)
+
+    dnl Note to my future self:
+    dnl When we add the GUI client, GTK will need
+    dnl to be included when we have EITHER that client
+    dnl OR libsharing turned on.
+
+    PKG_CHECK_MODULES(GTK, [gtk+-2.0])
+    AC_SUBST(GTK_CFLAGS)
+    AC_SUBST(GTK_LIBS)
+
+fi
+
 if test x$enable_libsocialweb = xyes; then
 	AC_DEFINE(HAVE_LIBSOCIALWEB,1,[Build with libsocialweb support])
 
@@ -72,6 +98,7 @@ AC_OUTPUT( Makefile \
 	src/dbus/Makefile \
 	src/eog/Makefile \
 	src/cmd/Makefile \
+	src/sharing/Makefile \
 	data/Makefile \
 	)
 
