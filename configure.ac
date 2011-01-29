@@ -70,7 +70,7 @@ fi
 if test x$enable_libsharing = xyes; then
     AC_DEFINE(WANT_LIBSHARING,1,[Build with libsharing support])
 
-    PKG_CHECK_MODULES(LIBSHARING, [libsharing])
+    PKG_CHECK_MODULES(LIBSHARING, [libsharing conic])
     AC_SUBST(LIBSHARING_CFLAGS)
     AC_SUBST(LIBSHARING_LIBS)
 
