@@ -31,25 +31,7 @@
 SharingPluginInterfaceAccountValidateResult validate (SharingAccount* account,
     ConIcConnection* con, gboolean *cont, gboolean* dead_mans_switch)
 {
-    SharingPluginInterfaceAccountValidateResult ret =
-        SHARING_ACCOUNT_VALIDATE_SUCCESS;
-
-    SharingHTTP * http = sharing_http_new ();
-
-    /* Correct fields must be added to http request before sending */
-
-    SharingHTTPRunResponse res;
-    res = sharing_http_run (http, "http://example.com/post");
-    if (res == SHARING_HTTP_RUNRES_SUCCESS) {
-      ULOG_DEBUG_L ("Got response (%d): %s\n", sharing_http_get_res_code (http),
-		    sharing_http_get_res_body (http, NULL));
-    } else {
-      ULOG_ERR_L ("Couldn't get stuff from service\n");
-      ret = SHARING_ACCOUNT_VALIDATE_FAILED;
-    }
-    sharing_http_unref (http); 
-    
-
-    return ret;
+	/* there are no accounts; it's always valid */
+	return TRUE;
 }
 
