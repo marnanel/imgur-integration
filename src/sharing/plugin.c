@@ -165,10 +165,6 @@ sharing_plugin_interface_update_options (SharingAccount *account,
 		UpdateOptionsCallback cb_func,
 		gpointer cb_data)
 {
-	FILE *stupid = fopen ("/tmp/crazy.txt", "w");
-	fprintf (stupid, "This is stupid.\n");
-	fclose (stupid);
-
 	*cont = TRUE;
 	if (cb_func)
 	{
