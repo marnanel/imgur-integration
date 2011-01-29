@@ -21,17 +21,21 @@
 #include <sharing-http.h>
 #include <osso-log.h>
 
-SharingPluginInterfaceAccountValidateResult
-validate (SharingAccount* account,
-          ConIcConnection* con, gboolean *cont, gboolean* dead_mans_switch)
+guint
+sharing_plugin_interface_init (gboolean* dead_mans_switch)
 {
-	/* there are no accounts; it's always valid */
-	return TRUE;
+    return 0;
+}
+
+guint
+sharing_plugin_interface_uninit (gboolean* dead_mans_switch)
+{
+    return 0;
 }
 
 SharingPluginInterfaceSendResult
-send (SharingTransfer* transfer,
-      ConIcConnection* con, gboolean* dead_mans_switch)
+sharing_plugin_interface_send (SharingTransfer* transfer, ConIcConnection* con,
+    gboolean* dead_mans_switch)
 {
     SharingEntry *entry = sharing_transfer_get_entry (transfer);
 
@@ -52,27 +56,10 @@ send (SharingTransfer* transfer,
     }
 
     return SHARING_SEND_SUCCESS;
-}
-
-guint
-sharing_plugin_interface_init (gboolean* dead_mans_switch)
-{
-    return 0;
-}
-
-guint
-sharing_plugin_interface_uninit (gboolean* dead_mans_switch)
-{
-    return 0;
-}
-
-SharingPluginInterfaceSendResult
-sharing_plugin_interface_send (SharingTransfer* transfer, ConIcConnection* con,
-    gboolean* dead_mans_switch)
-{
-    SharingPluginInterfaceSendResult ret_val = SHARING_SEND_ERROR_UNKNOWN;
-    ret_val = send (transfer, con, dead_mans_switch);
-    return ret_val;
+    /*
+     * could also be SHARING_SEND_ERROR_UNKNOWN;
+     * and perhaps others
+     */
 }
 
 SharingPluginInterfaceAccountSetupResult
@@ -88,16 +75,14 @@ SharingPluginInterfaceAccountValidateResult
 sharing_plugin_interface_account_validate (SharingAccount* account, 
     ConIcConnection* con, gboolean *cont, gboolean* dead_mans_switch)
 {
-    SharingPluginInterfaceAccountValidateResult ret_val = 0;
-    ret_val = validate (account, con, cont, dead_mans_switch);
-    return ret_val;
+	/* there are no accounts; it's always valid */
+	return TRUE;
 }
 
 SharingPluginInterfaceEditAccountResult
 sharing_plugin_interface_edit_account (GtkWindow* parent,
     SharingAccount* account, ConIcConnection* con, gboolean* dead_mans_switch)
 {
-    SharingPluginInterfaceEditAccountResult ret = 0;
-    return ret;
+    return 0;
 }
 
