@@ -63,6 +63,12 @@ imgur_upload_init (ImgurUpload *iu)
       g_error_free (error);
     }
 
+  if (!dbus_g_proxy_call (proxy, "RequestName", &error,
+        G_TYPE_STRING, "com.imgur", G_TYPE_UINT, 0,
+        G_TYPE_INVALID,
+        G_TYPE_UINT, &ret, G_TYPE_INVALID))
+    g_error ("Failed to request name: %s", error->message);
+ 
   g_object_unref (proxy);
 
 }
@@ -269,7 +275,6 @@ main (int argc, char **argv)
   DBusGConnection *bus;
   DBusGProxy *bus_proxy;
   ImgurUpload *uploader;
-  int request_name_result;
 
   g_type_init ();
 
@@ -288,18 +293,8 @@ main (int argc, char **argv)
   bus_proxy = dbus_g_proxy_new_for_name (bus, "org.freedesktop.DBus",
                 "/org/freedesktop/DBus", "org.freedesktop.DBus");
 
-  if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
-        G_TYPE_STRING, "com.imgur", G_TYPE_UINT, 0,
-        G_TYPE_INVALID,
-        G_TYPE_UINT, &request_name_result, G_TYPE_INVALID))
-    g_error ("Failed to request name: %s", error->message);
-
   uploader = g_object_new (IMGUR_TYPE_UPLOAD,
                            NULL);
-
-  dbus_g_connection_register_g_object (bus,
-                                       "/com/imgur",
-                                       G_OBJECT (uploader));
 
   g_main_loop_run (mainloop);
 
