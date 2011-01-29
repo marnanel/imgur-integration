@@ -16,7 +16,6 @@
 #include <osso-log.h>
 #include <conicconnection.h>
 #include "validate.h"
-#include "common.h"
 
 /**
  * test:

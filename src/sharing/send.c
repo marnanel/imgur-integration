@@ -14,7 +14,6 @@
 #include <osso-log.h>
 #include <sharing-http.h>
 #include "send.h"
-#include "common.h"
 
 SharingPluginInterfaceSendResult
 send (SharingTransfer* transfer,
