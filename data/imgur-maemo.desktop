@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=imgur
+Comment=Upload to the web
+Exec=/usr/bin/imgur-doc
+Type=Application
+Icon=imgur
