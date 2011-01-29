@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# This is a simple shell script to display the
+# documentation in a web browser under Maemo.
+#
+dbus-send --system --type=method_call --dest=com.nokia.osso_browser /com/nokia/osso_browser/request com.nokia.osso_browser.load_url string:"file:///opt/imgur/imgur-maemo.html"
