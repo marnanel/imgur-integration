@@ -74,6 +74,10 @@ if test x$enable_libsharing = xyes; then
     AC_SUBST(LIBSHARING_CFLAGS)
     AC_SUBST(LIBSHARING_LIBS)
 
+    PKG_CHECK_MODULES(HILDON, [hildon-1])
+    AC_SUBST(HILDON_CFLAGS)
+    AC_SUBST(HILDON_LIBS)
+
     dnl Note to my future self:
     dnl When we add the GUI client, GTK will need
     dnl to be included when we have EITHER that client

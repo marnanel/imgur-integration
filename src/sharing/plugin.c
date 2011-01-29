@@ -1,25 +1,30 @@
 /*
- * This file is part of sharing-plugin-template
- *
- * Copyright (C) 2008-2009 Nokia Corporation. All rights reserved.
- *
- * This maemo code example is licensed under a MIT-style license,
- * that can be found in the file called "COPYING" in the root
- * directory.
- *
+ * This was originally based on Maemo example code that was
+ * copyright (C) 2008-2009 Nokia Corporation. All rights reserved.
+ * That code was licensed under an MIT-style licence.
  */
 
+/* FIXME not all of these are necessary */
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <sharing-plugin-interface.h>
 #include <sharing-transfer.h>
 #include <conicconnection.h>
 #include <osso-log.h>
-
+#include <hildon/hildon.h>
 #include <stdio.h>
 #include <sharing-account.h>
 #include <sharing-http.h>
 #include <osso-log.h>
+
+static void
+show_message (const char *message)
+{
+	  HildonNote* note = HILDON_NOTE
+		      (hildon_note_new_information (NULL,
+						    message));
+	  gtk_widget_show (GTK_WIDGET (note));
+}
 
 guint
 sharing_plugin_interface_init (gboolean* dead_mans_switch)
@@ -46,6 +51,9 @@ sharing_plugin_interface_send (SharingTransfer* transfer, ConIcConnection* con,
       if (!sharing_entry_media_get_sent (media))
       {
 	/* send it */
+	
+	show_message ("Sending something.");
+	      
 	if (0)
 	{
 	  sharing_entry_media_set_sent (media, TRUE);
@@ -68,7 +76,8 @@ sharing_plugin_interface_account_setup (GtkWindow* parent,
 		SharingAccount** worked_on,
 		osso_context_t* osso)
 {
-    return 0;
+	show_mesage ("Account setup");
+	return 0;
 }
 
 SharingPluginInterfaceAccountValidateResult
@@ -85,4 +94,6 @@ sharing_plugin_interface_edit_account (GtkWindow* parent,
 {
     return 0;
 }
+
+/* EOF plugin.c */
 
