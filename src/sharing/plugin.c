@@ -16,8 +16,53 @@
 #include <conicconnection.h>
 #include <osso-log.h>
 
-#include "send.h"
-#include "validate.h"
+#include <stdio.h>
+#include <sharing-account.h>
+#include <sharing-http.h>
+#include <osso-log.h>
+
+/**
+ * test:
+ * @account: #SharingAccount to be tested
+ * @con: Connection used
+ * @dead_mans_switch: Turn to %FALSE at least every 30 seconds.
+ *
+ * Test if #SharingAccount is valid.
+ *
+ * Returns: #SharingPluginInterfaceTestAccountResult
+ */
+SharingPluginInterfaceAccountValidateResult validate (SharingAccount* account,
+    ConIcConnection* con, gboolean *cont, gboolean* dead_mans_switch)
+{
+	/* there are no accounts; it's always valid */
+	return TRUE;
+}
+
+SharingPluginInterfaceSendResult
+send (SharingTransfer* transfer,
+      ConIcConnection* con, gboolean* dead_mans_switch)
+{
+
+    SharingEntry *entry = sharing_transfer_get_entry (transfer);
+
+    for (GSList* p = sharing_entry_get_media (entry); p; p=g_slist_next(p))
+    {
+      SharingEntryMedia* media = p->data;
+
+      if (!sharing_entry_media_get_sent (media))
+      {
+	/* send it */
+	if (0)
+	{
+	  sharing_entry_media_set_sent (media, TRUE);
+	}
+      }
+
+      *dead_mans_switch = 0; /* keepalive */
+    }
+
+    return SHARING_SEND_SUCCESS;
+}
 
 /**
  * sharing_plugin_interface_init:
