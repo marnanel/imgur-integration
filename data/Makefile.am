@@ -1,4 +1,14 @@
-if !HAVE_MAEMO
+if MAEMO
+# Under Maemo, also install the placeholder app.
+#
+optdir = /opt/maemo
+opt_DATA = \
+	   imgur-maemo.html \
+	   sharing-button.jpg
+apphildondir = $(datadir)/applications/hildon
+apphildon_DATA = \
+		 imgur-maemo.desktop
+else
 # Man pages. Don't attempt to install them under Maemo.
 #
 man_MANS = \
@@ -10,6 +20,9 @@ EXTRA_DIST= \
 	com.imgur.service.in \
 	imgur-service-glue.xml \
 	imgur.conf \
+	imgur-maemo.html \
+	sharing-button.jpg \
+	imgur-maemo.desktop \
 	$(man_MANS)
 
 servicedir = $(datadir)/dbus-1/services
@@ -19,6 +32,9 @@ CLEANFILES = com.imgur.service
 
 egconfdir = $(sysconfdir)/xdg/imgur
 egconf_DATA = imgur.conf
+
+pixmapdir = $(datadir)/pixmaps
+pixmap_DATA = imgur.png
 
 com.imgur.service: com.imgur.service.in
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
