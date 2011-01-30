@@ -1,5 +1,9 @@
+if !HAVE_MAEMO
+# Man pages. Don't attempt to install them under Maemo.
+#
 man_MANS = \
 	imgur.1
+endif
 
 BUILT_FILES=com.imgur.service
 EXTRA_DIST= \
