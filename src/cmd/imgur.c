@@ -5,6 +5,7 @@
 #include <time.h>
 #include <dbus/dbus-glib-bindings.h>
 #include "../../data/imgur-client-glue.h"
+#include <config.h>
 
 #define UPLOAD_METHOD "Upload"
 #define TIMEOUT_MS 3000
@@ -148,6 +149,9 @@ get_proxy (void)
 static void
 launch_browser (const char* url)
 {
+#ifdef MAEMO
+#error "this bit is not yet written"
+#else
 	GError *error = NULL;
 	gchar *command_line = g_strdup_printf ("xdg-open %s",
 			url);
@@ -160,7 +164,7 @@ launch_browser (const char* url)
 	}
 
 	g_free (command_line);
-
+#endif
 }
 
 /**
