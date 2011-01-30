@@ -1,0 +1,7 @@
+#!/bin/sh
+if test -e /etc/maemo_version; then
+	if [ "$1" = "remove" ]; then
+		/usr/bin/sharing-account-remover imgur
+	fi
+fi
+

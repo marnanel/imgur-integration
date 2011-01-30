@@ -1,0 +1,17 @@
+Source: imgur
+Section: utils
+Priority: extra
+Maintainer: Thomas Thurman <thomas@thurman.org.uk>
+Build-Depends: debhelper (>= 5), autotools-dev, dpkg-dev (>= 1.13.19)
+Standards-Version: 3.7.2
+
+Package: imgur
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Upload images to imgur.com
+ A program to upload images to imgur.com, a site for
+ free image hosting on the World Wide Web, and a command-line
+ application to invoke it.
+ .
+ Under Maemo, this includes a sharing service.
+ Under GNOME, it includes an Eye of GNOME plugin.
