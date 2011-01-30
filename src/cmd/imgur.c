@@ -149,10 +149,26 @@ get_proxy (void)
 static void
 launch_browser (const char* url)
 {
-#ifdef MAEMO
-#error "this bit is not yet written"
-#else
 	GError *error = NULL;
+
+#ifdef MAEMO
+	/*
+	 * Maemo has its own rather weird way of doing this.
+	 */
+	DBusGProxy *proxy = dbus_g_proxy_new_for_name (connection,
+			"com.nokia.osso_browser",
+			"/com/nokia/osso_browser/request",
+			"com.nokia.osso_browser");
+
+	if (!dbus_g_proxy_call (proxy, "load_url", &error,
+				G_TYPE_STRING, url,
+				G_TYPE_INVALID,
+				G_TYPE_INVALID))
+	{
+		g_warning ("Failed to spawn browser: %s", error->message);
+		g_error_free (error);
+	}
+#else
 	gchar *command_line = g_strdup_printf ("xdg-open %s",
 			url);
 
