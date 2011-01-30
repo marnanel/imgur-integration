@@ -16,6 +16,7 @@ AC_DISABLE_STATIC()
 dnl ----
 
 dnl Is this Maemo?
+dnl FIXME: This should be a separate m4 macro, really.
 
 AC_MSG_CHECKING([for Maemo])
 if test -f /etc/maemo_version; then
@@ -25,7 +26,7 @@ if test -f /etc/maemo_version; then
 
 	AC_MSG_RESULT([yes])
 	AC_DEFINE(MAEMO,1,[Running under Maemo])
-	enable_maemo = yes
+	AC_SUBST([enable_maemo], [yes])
 
 	AC_SUBST([default_eog], [no])
 	AC_SUBST([default_libsharing], [yes])
@@ -35,7 +36,7 @@ else
 	dnl and don't build the libsharing plugin.
 
 	AC_MSG_RESULT([no])
-	enable_maemo = no
+	AC_SUBST([enable_maemo], [no])
 
 	AC_SUBST([default_eog], [yes])
 	AC_SUBST([default_libsharing], [no])
@@ -75,7 +76,7 @@ dnl ----
 
 AM_CONDITIONAL(WANT_EOG, test x$enable_eog = xyes)
 AM_CONDITIONAL(WANT_LIBSHARING, test x$enable_libsharing != xno)
-AM_CONDITIONAL(HAVE_MAEMO, test x$enable_maemo = xyes)
+AM_CONDITIONAL(MAEMO, test x$enable_maemo = xyes)
 
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.4, gobject-2.0 >= 2.4])
 AC_SUBST(GLIB_CFLAGS)
