@@ -20,6 +20,9 @@ dnl Is this Maemo?
 AC_MSG_CHECKING([for Maemo])
 if test -f /etc/maemo_version; then
 
+	dnl Yes, so don't build the eog plugin
+	dnl and do build the libsharing plugin.
+
 	AC_MSG_RESULT([yes])
 	AC_DEFINE(MAEMO,1,[Running under Maemo])
 	enable_maemo = yes
@@ -28,6 +31,8 @@ if test -f /etc/maemo_version; then
 	AC_SUBST([default_libsharing], [yes])
 
 else
+	dnl No, so do build the eog plugin
+	dnl and don't build the libsharing plugin.
 
 	AC_MSG_RESULT([no])
 	enable_maemo = no
@@ -59,17 +64,18 @@ AC_ARG_ENABLE(libsocialweb,
 AC_ARG_ENABLE(eog,
   AC_HELP_STRING([--disable-eog],
 		 [don't build the Eye of Gnome plugin]),,
-  enable_eog=$(default_eog))
+  enable_eog=$default_eog)
 
 AC_ARG_ENABLE(libsharing,
   AC_HELP_STRING([--enable-libsharing],
                  [build Maemo libsharing plugin]),,
-  enable_libsharing=$(default_libsharing))
+  enable_libsharing=$default_libsharing)
 
 dnl ----
 
 AM_CONDITIONAL(WANT_EOG, test x$enable_eog = xyes)
 AM_CONDITIONAL(WANT_LIBSHARING, test x$enable_libsharing != xno)
+AM_CONDITIONAL(HAVE_MAEMO, test x$enable_maemo = xyes)
 
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.4, gobject-2.0 >= 2.4])
 AC_SUBST(GLIB_CFLAGS)
