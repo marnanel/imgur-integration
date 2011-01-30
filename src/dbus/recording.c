@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <curl/curl.h>
 #include "recording.h"
+#include <config.h>
 
 static gchar*
 get_field (GHashTable *fields,
@@ -90,11 +91,19 @@ imgur_recording_store(GHashTable *fields,
 		G_KEY_FILE_NONE,
 		NULL);
 
+#ifndef MAEMO
+	/*
+	 * Store the filename of the image we're uploading.
+	 * No point doing this on Maemo: the image we're
+	 * passed (from the libsharing client) doesn't
+	 * have the real filename anyway.
+	 */
 	g_key_file_set_string (keyfile,
 		group,
 		"filename",
 		filename);
-
+#endif
+	
 	temp = g_strdup_printf ("%ld",
 		time (NULL));
 	g_key_file_set_string (keyfile,
