@@ -12,9 +12,9 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
-   width="101"
+   width="100"
    height="100"
-   sodipodi:docname="imgur.jpeg">
+   sodipodi:docname="imgur.svg">
   <metadata
      id="metadata8">
     <rdf:RDF>
@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -46,32 +46,32 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1355"
-     inkscape:window-height="710"
+     inkscape:window-width="1358"
+     inkscape:window-height="706"
      id="namedview4"
      showgrid="false"
      inkscape:zoom="2.36"
-     inkscape:cx="137.36441"
-     inkscape:cy="21.610169"
+     inkscape:cx="50.076274"
+     inkscape:cy="21.18644"
      inkscape:window-x="0"
      inkscape:window-y="29"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <rect
-     style="fill:#000000;fill-opacity:1;stroke:none"
+     style="fill:#333333;fill-opacity:1;stroke:none"
      id="rect3616"
-     width="100.84746"
-     height="99.576271"
-     x="0.84745765"
+     width="100"
+     height="100"
+     x="0"
      y="0"
-     ry="21.554417" />
+     ry="21.646137" />
   <rect
      style="fill:#ffffff;fill-opacity:1;stroke:none"
      id="rect2820"
      width="16"
      height="47.881355"
-     x="43.271187"
-     y="38.559322"
+     x="42.423729"
+     y="38.983051"
      ry="6.3001785" />
   <path
      sodipodi:type="arc"
@@ -82,5 +82,5 @@
      sodipodi:rx="8.2627115"
      sodipodi:ry="6.9915257"
      d="m 80.932206,24.364407 a 8.2627115,6.9915257 0 1 1 -16.525423,0 8.2627115,6.9915257 0 1 1 16.525423,0 z"
-     transform="matrix(0.96820517,0,0,1.1818182,-19.087794,-3.5824344)" />
+     transform="matrix(0.96820517,0,0,1.1818182,-19.935252,-3.1587055)" />
 </svg>

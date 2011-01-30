@@ -178,6 +178,8 @@ launch_browser (const char* url)
 		g_error_free (error);
 		error = NULL;
 	}
+
+	g_free (command_line);
 #endif
 }
 
