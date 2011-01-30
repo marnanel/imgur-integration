@@ -8,4 +8,7 @@ libimgur_la_CFLAGS = $(DBUSGLIB_CFLAGS) $(GLIB_CFLAGS) $(LIBSHARING_CFLAGS) $(GT
 libimgur_la_LDFLAGS = -module -avoid-version -export-dynamic
 libimgur_la_LIBADD = $(DBUSGLIB_LIBS) $(GLIB_LIBS) $(LIBSHARING_LIBS) $(GTK_LIBS) $(HILDON_LIBS)
 
-
+if MAEMO
+bin_SCRIPTS = \
+	      imgur-doc
+endif
