@@ -15,6 +15,20 @@ AC_DISABLE_STATIC()
 
 dnl ----
 
+dnl Is this Maemo?
+
+AC_MSG_CHECKING([for Maemo])
+if test -f /etc/maemo_version; then
+	AC_MSG_RESULT([yes])
+	AC_DEFINE(MAEMO,1,[Running under Maemo])
+	enable_maemo = yes
+else
+	AC_MSG_RESULT([no])
+	enable_maemo = no
+fi
+
+dnl ----
+
 AM_PROG_LIBTOOL
 AM_CONFIG_HEADER(config.h)
 AM_PROG_MKDIR_P
