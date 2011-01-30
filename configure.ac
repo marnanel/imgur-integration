@@ -19,12 +19,22 @@ dnl Is this Maemo?
 
 AC_MSG_CHECKING([for Maemo])
 if test -f /etc/maemo_version; then
+
 	AC_MSG_RESULT([yes])
 	AC_DEFINE(MAEMO,1,[Running under Maemo])
 	enable_maemo = yes
+
+	AC_SUBST([default_eog], [no])
+	AC_SUBST([default_libsharing], [yes])
+
 else
+
 	AC_MSG_RESULT([no])
 	enable_maemo = no
+
+	AC_SUBST([default_eog], [yes])
+	AC_SUBST([default_libsharing], [no])
+
 fi
 
 dnl ----
@@ -49,12 +59,12 @@ AC_ARG_ENABLE(libsocialweb,
 AC_ARG_ENABLE(eog,
   AC_HELP_STRING([--disable-eog],
 		 [don't build the Eye of Gnome plugin]),,
-  enable_eog=yes)
+  enable_eog=$(default_eog))
 
 AC_ARG_ENABLE(libsharing,
   AC_HELP_STRING([--enable-libsharing],
                  [build Maemo libsharing plugin]),,
-  enable_libsharing=no)
+  enable_libsharing=$(default_libsharing))
 
 dnl ----
 
