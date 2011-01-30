@@ -14,6 +14,15 @@ src/cmd/
 src/eog/
    An Eye of Gnome (eog) plugin.
 
+src/sharing/
+   A Maemo libsharing plugin.
+
+If you are compiling under Maemo, then by default the
+eog plugin is not built and the libsharing plugin
+is built. If you are not compiling under Maemo, then
+by default the eog plugin is built and the libsharing
+plugin is not built.
+
 There is much more information on the wiki, which is at
 <https://github.com/tthurman/imgur-integration/wiki>.
 
