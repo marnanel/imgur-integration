@@ -1,0 +1,41 @@
+Source: imgur
+Section: user/utils
+Priority: extra
+Maintainer: Thomas Thurman <thomas@thurman.org.uk>
+Build-Depends: debhelper (>= 5), autotools-dev, dpkg-dev (>= 1.13.19)
+Standards-Version: 3.7.2
+
+Package: imgur
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Upload images to imgur.com
+ A program to upload images to imgur.com, a site for
+ free image hosting on the World Wide Web, and a command-line
+ application to invoke it.
+ .
+ Under Maemo, this includes a sharing service.
+ Under GNOME, it includes an Eye of GNOME plugin.
+XSBC-Bugtracker: https://github.com/tthurman/imgur-integration/issues
+XSBC-Maemo-Display-Name: imgur.com integration
+XB-Maemo-Icon-26:
+ MB5!.1PT*&@H````-24A$4@```#`````P"`8```!7`OF'````!'-"250("`@(
+ M?`ADB`````EP2%ES```&EP``!I<!LUME"@```!ET15AT4V]F='=A<F4`=W=W
+ M+FEN:W-C87!E+F]R9YON/!H```+H241!5&B![9K/2Q1A&,<_[\S*B$F&[4'6
+ M3ME)BTUGO5@AB(>$4"CP(D*!5\'_PXNGN@1YW9/'//H#0G"F($@$P4#8.KA&
+ M>Q!JVWF?#K.KJ^UBN[WKK+&?X_N\/,_W._/.O,,\KQ(1*C$\/#RHM1Y12J4`
+ M%^@'[(J3S1,`.X`O(IYE6>^VM[<_5)JHSAM(I5)=P!+PO-$J:V096/`\+U<^
+ M>,:`Z[J/E5*O@=[+U?;79$1DSO?]U=+`B8&B^+>12:L!$9DHF5`B4EHVGVC>
+ M*W^>###@>5[.*@XL<77$0ZAU"4"E4JE!$7D?L:"Z4$H-65KKD:B%U(O6>B16
+ M?,\;YT9OP*UD`:=3R'ZV.?#;$&VVAE(J%2/<I(QRYU&>P6<_4,4GK.\A]#W(
+ ML_&R@T)>F2SE6H0[K#&Z$IK[3T_%EXC?#KCWY*?)4@#]%H8_#Q)W?V%5R=B;
+ M+)@L!6!;%\^IC?;KE;^MPI@&HRL(C!O(?:F>,O?5ANK^ZL*X@0.OC>.CRFEW
+ M5AW3Y<P;*.05&Z\Z^'9@GQGST^UD/L9,ET.YKFOXIIYR[:;&Z12^9VRT\><W
+ MQ/PE*>/XR.+XJ)$5&F@@%HN13"9Q'(>]O3T.#P\;4Z<126=G9YF9F2$>CP,0
+ M!`'KZ^LL+BX:-V+\(4XD$LS/SY^(![!MF[&Q,::GITV7,V]@<G(2RZJ<=FIJ
+ MJFJL7HP;Z.GIJ1KK[NXF%C.[:HT;N&Q:!J*F92!J6@:BIF4@:EH&HJ9E(&K^
+ M"P-!U"+^@<`B[`8:(Y_/5XUIK=':Z"_J'0OP369<6UNK&MO<W*10,/I_Q;=$
+ MQ#.9<6MKB_W]_3_&@R`@G4Z;+(6(>`UI,=FVS>CH*./CXSB.P^[N+BLK*V2S
+ M69-E4$H-E;J4;VB^QO9%+'N>]Z+T&ET@;%U>%3*$FL-]P/.\G(C,12JI!D1D
+ MKG3DX&0C\WU_540F:.X[D2GOTL.YG;@8&"`\6-%L+`,#Y>*APFF5$E?EN,UO
+ 4U(L1!BGZ#3H`````245.1*Y"8((`
+ 

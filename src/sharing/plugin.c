@@ -34,7 +34,8 @@ launch_browser (DBusGConnection *connection,
 				G_TYPE_INVALID,
 				G_TYPE_INVALID))
 	{
-		/* do something to complain about error->message */
+		g_warning ("Error in launching browser: %s",
+				error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -83,7 +84,6 @@ sharing_plugin_interface_send (SharingTransfer* transfer, ConIcConnection* con,
 	DBusGConnection* connection = get_connection ();
 	GSList* p;
 	DBusGProxy *uploader = NULL;
-	GError *error = NULL;
 
 	if (!connection)
 	{
@@ -98,6 +98,7 @@ sharing_plugin_interface_send (SharingTransfer* transfer, ConIcConnection* con,
 	for (p=sharing_entry_get_media (entry); p; p=g_slist_next (p))
 	{
 		SharingEntryMedia* media = p->data;
+		GError *error = NULL;
 		gchar *url = NULL;
 		GHashTable *result = NULL;
 		const gchar *filename =
