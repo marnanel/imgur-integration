@@ -11,10 +11,13 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2"
    version="1.1"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.0 r9654"
    width="100"
    height="100"
-   sodipodi:docname="imgur.svg">
+   sodipodi:docname="imgur.svg"
+   inkscape:export-filename="/home/marnanel/proj/imgur/data/imgur.png"
+   inkscape:export-xdpi="42.84"
+   inkscape:export-ydpi="42.84">
   <metadata
      id="metadata8">
     <rdf:RDF>
@@ -23,7 +26,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -46,15 +49,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1358"
-     inkscape:window-height="706"
+     inkscape:window-width="1022"
+     inkscape:window-height="558"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="2.36"
+     inkscape:zoom="3.3279688"
      inkscape:cx="50.076274"
      inkscape:cy="21.18644"
      inkscape:window-x="0"
-     inkscape:window-y="29"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <rect
