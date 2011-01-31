@@ -8,6 +8,12 @@ opt_DATA = \
 apphildondir = $(datadir)/applications/hildon
 apphildon_DATA = \
 		 imgur-maemo.desktop
+servicesdir = `$(PKG_CONFIG) libsharing --variable=servicesdir`
+services_DATA = imgur.service.xml
+
+icondir = $(datadir)/icons/hicolor/48x48/hildon
+icon_DATA = imgur.png
+
 else
 # Man pages. Don't attempt to install them under Maemo.
 #
@@ -15,7 +21,7 @@ man_MANS = \
 	imgur.1
 endif
 
-BUILT_FILES=com.imgur.service
+BUILT_FILES=com.imgur.service imgur.service.xml
 EXTRA_DIST= \
 	com.imgur.service.in \
 	imgur-service-glue.xml \
@@ -38,6 +44,9 @@ pixmap_DATA = imgur.png
 
 com.imgur.service: com.imgur.service.in
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
+
+imgur.service.xml: imgur.service.xml.in
+	@sed -e "s|\@pixmapdir\@|$(pixmapdir)|" $< > $@
 
 imgur-client-glue.h: imgur-service-glue.xml
 	$(DBUSBINDINGTOOL) --mode=glib-client --output=$@ --prefix=imgur_service $^

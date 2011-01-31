@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<service plugin="libimgur.so" provider="Imgur"> 
+ 
+   <accounts plugInSetup="1" plugInEdit="1">
+   </accounts> 
+ 
+   <ui> 
+       <name>Imgur</name>  
+       <icon type="post">@pixmapdir@/imgur.png</icon> 
+       <icon type="setup">@pixmapdir@/imgur.png</icon> 
+
+       <options> 
+       </options>
+    </ui>
+</service>
