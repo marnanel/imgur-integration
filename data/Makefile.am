@@ -29,6 +29,7 @@ EXTRA_DIST= \
 	imgur-maemo.html \
 	sharing-button.jpg \
 	imgur-maemo.desktop \
+	imgur.png \
 	$(man_MANS)
 
 servicedir = $(datadir)/dbus-1/services
