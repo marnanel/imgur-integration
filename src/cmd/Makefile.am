@@ -5,7 +5,7 @@ INCLUDES = \
 	$(GLIB_CFLAGS)
 
 imgur_SOURCES = \
-	imgur-client-glue.h \
+	../../data/imgur-client-glue.h \
 	imgur.c
 
 imgur_LDADD = \
