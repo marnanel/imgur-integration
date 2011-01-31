@@ -30,6 +30,7 @@ EXTRA_DIST= \
 	sharing-button.jpg \
 	imgur-maemo.desktop \
 	imgur.png \
+	imgur.service.xml.in \
 	$(man_MANS)
 
 servicedir = $(datadir)/dbus-1/services
@@ -54,4 +55,4 @@ imgur-client-glue.h: imgur-service-glue.xml
 BUILT_SOURCES = imgur-client-glue.h
 
 clean-local:
-	rm -f imgur-client-glue.h
+	rm -f imgur-client-glue.h imgur.service.xml

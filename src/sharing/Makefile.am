@@ -9,6 +9,8 @@ libimgur_la_LDFLAGS = -module -avoid-version -export-dynamic
 libimgur_la_LIBADD = $(DBUSGLIB_LIBS) $(GLIB_LIBS) $(LIBSHARING_LIBS) $(GTK_LIBS) $(HILDON_LIBS)
 
 if MAEMO
+EXTRA_DIST = \
+	      imgur-doc
 bin_SCRIPTS = \
 	      imgur-doc
 endif
