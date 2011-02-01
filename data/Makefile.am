@@ -5,9 +5,6 @@ optdir = /opt/maemo
 opt_DATA = \
 	   imgur-maemo.html \
 	   sharing-button.jpg
-apphildondir = $(datadir)/applications/hildon
-apphildon_DATA = \
-		 imgur-maemo.desktop
 servicesdir = `$(PKG_CONFIG) libsharing --variable=servicesdir`
 services_DATA = imgur.service.xml
 
@@ -28,7 +25,6 @@ EXTRA_DIST= \
 	imgur.conf \
 	imgur-maemo.html \
 	sharing-button.jpg \
-	imgur-maemo.desktop \
 	imgur.png \
 	imgur.service.xml.in \
 	$(man_MANS)
