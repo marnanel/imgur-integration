@@ -79,6 +79,10 @@ imgur_prefs_new(void)
 	result->username = get_value (ini, "username", NULL);
 	result->password = get_value (ini, "password", NULL);
 
+	temp = get_value (ini, "action", "browser");
+	result->action = action_from_string (temp);
+	g_free (temp);
+
 	temp = get_value (ini, "recording", "1");
 	result->recording = (temp && temp[0]=='1');
 	g_free (temp);

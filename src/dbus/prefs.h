@@ -2,6 +2,7 @@
 #define PREFS_H 1
 
 #include <glib.h>
+#include "action.h"
 
 /**
  * Preferences for the imgur service, as might
@@ -41,6 +42,11 @@ typedef struct _ImgurPrefs {
  * Not currently in use.
  */
  gchar *password;
+
+/**
+ * Action to take after we successfully upload a picture.
+ */
+ AfterwardsAction action;
 } ImgurPrefs;
 
 /**

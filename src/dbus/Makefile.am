@@ -20,6 +20,8 @@ imgur_service_SOURCES = \
 	recording.c \
 	list-records.h \
 	list-records.c \
+	action.h \
+	action.c \
 	imgur-service-glue.h
 
 test_parse_SOURCES = \
@@ -35,6 +37,8 @@ test_upload_SOURCES = \
 test_prefs_SOURCES = \
 	prefs.c \
 	prefs.h \
+	action.h \
+	action.c \
 	test-prefs.c
 
 test_list_records_SOURCES = \
