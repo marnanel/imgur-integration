@@ -314,11 +314,19 @@ static void
 perform_upload (void)
 {
 	GError *error = NULL;
+	gchar *action = NULL;
 	GHashTable *result = NULL;
 
-	if (com_imgur_upload (uploader, filename, &result, &error))
+	if (com_imgur_upload (uploader, filename, &result, &action, &error))
 	  {
-	    if (show_browser)
+
+            if (action)
+            {
+              g_print ("imgur: action taken: %s\n", action);
+            }
+
+	    if (show_browser &&
+		(!action || strcmp(action, "browser")!=0))
 	      {
 	        GValue *url = g_hash_table_lookup (result, "imgur_page");
 
@@ -329,6 +337,7 @@ perform_upload (void)
 	      }
 
             print_hash_table (result, NULL);
+	    g_free (action);
 
 	    exit (EXIT_OK);
 	  }

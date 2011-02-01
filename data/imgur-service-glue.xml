@@ -4,16 +4,82 @@
 
   <interface name="com.imgur">
 
+    <!--
+         Sends an image to imgur.com.
+
+	 \param image  The filename of the image.
+	               Must be an absolute path to a local file.
+	 \param d_ret  The details of the uploaded image.
+	 \param action_ret  The action which was automatically
+	                    taken with the new image (e.g. opening
+	                    the browser to look at it.)
+    -->
     <method name="Upload">
       <arg type="s" name="image" direction="in" />
       <arg type="a{sv}" name="d_ret" direction="out" />
+      <arg type="s" name="action_ret" direction="out" />
     </method>
 
+    <!--
+         Lists all records of images we have locally.
+    -->
     <method name="ListRecords">
       <arg type="as" name="d_ret" direction="out" />
     </method>
 
+    <!--
+         Lists some records of popular images on
+         the remote server.
+
+         (Not currently implemented.)
+    -->
+    <method name="ListPopular">
+      <arg type="as" name="d_ret" direction="out" />
+    </method>
+
+    <!--
+         Sent when the service decides that ListRecords
+         is going to return a new value from now on.
+         
+         (Not currently implemented.)
+    -->
+    <signal name="ListChanged">
+    </signal>
+
+    <!--
+         Returns the details of one record held locally.
+    -->
     <method name="GetRecord">
+      <arg type="s" name="record" direction="in" />
+      <arg type="a{sv}" name="d_ret" direction="out" />
+    </method>
+
+    <!--
+         Forgets the details of one record held locally.
+         Does *not* delete the image from the web!
+
+         (Not currently implemented.)
+    -->
+    <method name="ForgetRecord">
+      <arg type="s" name="record" direction="in" />
+    </method>
+
+    <!--
+         Deletes an image from the web, and forgets
+         its local details.
+
+         (Not currently implemented.)
+    -->
+    <method name="DeleteRecord">
+      <arg type="s" name="record" direction="in" />
+    </method>
+
+    <!--
+         Returns some statistical information
+         about an image.
+         (Not currently implemented.)
+    -->
+     <method name="StatsForRecord">
       <arg type="s" name="record" direction="in" />
       <arg type="a{sv}" name="d_ret" direction="out" />
     </method>

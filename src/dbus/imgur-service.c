@@ -108,7 +108,8 @@ hash_add_entry (GHashTable *hash, gchar *key, gchar *value)
 }
 
 gboolean
-imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GError **error)
+imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result,
+	gchar **action_ret, GError **error)
 {
   gboolean success;
   gchar *message = NULL;
@@ -169,6 +170,9 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result, GEr
          imgur_recording_store (*result,
 	        filename);
        }
+
+       /* simple but correct, for now */
+       *action_ret = g_strdup ("none");
 
        g_list_free (parsed);
        g_free (message);
@@ -239,6 +243,17 @@ imgur_service_list_records (ImgurUpload *iu, gchar ***result, GError **error)
 }
 
 gboolean
+imgur_service_list_popular (ImgurUpload *iu, gchar ***result, GError **error)
+{
+	/* STUB */
+	*error = g_error_new (g_imgur_error_quark (),
+		4,
+		"Not yet implemented.");
+	*result = NULL;
+	return FALSE;
+}
+
+gboolean
 imgur_service_get_record (ImgurUpload *iu, gchar *record, GHashTable **result, GError **error)
 {
 	gchar *last_dot = strrchr (record, '.');
@@ -265,6 +280,37 @@ imgur_service_get_record (ImgurUpload *iu, gchar *record, GHashTable **result, G
 	g_free (temp);
 
 	return TRUE;
+}
+
+gboolean
+imgur_service_forget_record (ImgurUpload *iu, gchar *record, GError **error)
+{
+	/* STUB */
+	*error = g_error_new (g_imgur_error_quark (),
+		4,
+		"Not yet implemented.");
+	return FALSE;
+}
+
+gboolean
+imgur_service_delete_record (ImgurUpload *iu, gchar *record, GError **error)
+{
+	/* STUB */
+	*error = g_error_new (g_imgur_error_quark (),
+		4,
+		"Not yet implemented.");
+	return FALSE;
+}
+
+gboolean
+imgur_service_stats_for_record (ImgurUpload *iu, gchar *record, GHashTable **result, GError **error)
+{
+	/* STUB */
+	*error = g_error_new (g_imgur_error_quark (),
+		4,
+		"Not yet implemented.");
+	*result = NULL;
+	return FALSE;
 }
 
 int

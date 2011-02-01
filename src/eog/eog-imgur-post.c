@@ -18,6 +18,7 @@ eog_imgur_post (gchar *filename,
 	DBusGProxy *uploader = NULL;
 	GError *error = NULL;
 	GHashTable *result = NULL;
+	gchar *action = NULL;
 
 	/* FIXME: PROBABLY WRONG.
 	Can we get a connection from elsewhere?
@@ -38,9 +39,12 @@ eog_imgur_post (gchar *filename,
 		"/com/imgur",
 		"com.imgur");
 
-	if (com_imgur_upload (uploader, filename, &result, &error))
+	if (com_imgur_upload (uploader, filename, &result, &action, &error))
 	  {
 	        GValue *url = g_hash_table_lookup (result, "imgur_page");
+
+		/* for now, we don't use this */
+		g_free (action);
 
 		if (url)
 	          {
