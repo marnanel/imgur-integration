@@ -1,3 +1,8 @@
+2011-01-31 - v0.5.1
+   - Don't add a launcher icon; instead, pop up help after install
+     (but only on Maemo).
+   - Bugfixes.
+
 2011-01-31 - v0.5.0 - "Fox-Talbot"
    - Maemo libsharing plugin.
 

@@ -1,3 +1,10 @@
+imgur (0.51-1) unstable; urgency=low
+
+  * don't add an application icon
+  * launch the browser with help after installation
+
+ -- Thomas Thurman <thomas@thurman.org.uk>  Mon, 31 Jan 2011 19:16:36 -0400
+
 imgur (0.50-1) unstable; urgency=low
 
   * Initial debianisation
