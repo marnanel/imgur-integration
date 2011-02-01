@@ -16,10 +16,6 @@ action_from_string (const gchar *str)
 	{
 		return ACTION_GIMGUR;
 	}
-	else if (strcmp (str, "open")==0)
-	{
-		return ACTION_OPEN;
-	}
 	else if (strcmp (str, "copy")==0)
 	{
 		return ACTION_COPY;
@@ -40,8 +36,6 @@ action_to_string (AfterwardsAction action)
 		return "none";
 	case ACTION_GIMGUR:
 		return "gimgur";
-	case ACTION_OPEN:
-		return "open";
 	case ACTION_COPY:
 		return "copy";
 	case ACTION_BROWSER:

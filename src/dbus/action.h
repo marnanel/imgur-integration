@@ -25,12 +25,6 @@ typedef enum _AfterwardsAction {
  ACTION_GIMGUR,
 
 /**
- * Attempt to xdg-open the file
- * (or the local equivalent).
- */
- ACTION_OPEN,
-
-/**
  * Copy the URL to the clipboard.
  */
  ACTION_COPY,
