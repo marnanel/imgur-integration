@@ -28,12 +28,13 @@
     </method>
 
     <!--
-         Lists some records of popular images on
-         the remote server.
+         Lists some records of popular or recent
+         images on the remote server.
 
          (Not currently implemented.)
     -->
-    <method name="ListPopular">
+    <method name="ListRemote">
+      <arg type="b" name="popular" direction="in" />
       <arg type="as" name="d_ret" direction="out" />
     </method>
 

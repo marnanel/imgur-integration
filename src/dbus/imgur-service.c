@@ -243,7 +243,7 @@ imgur_service_list_records (ImgurUpload *iu, gchar ***result, GError **error)
 }
 
 gboolean
-imgur_service_list_popular (ImgurUpload *iu, gchar ***result, GError **error)
+imgur_service_list_remote (ImgurUpload *iu, gboolean popular, gchar ***result, GError **error)
 {
 	/* STUB */
 	*error = g_error_new (g_imgur_error_quark (),
