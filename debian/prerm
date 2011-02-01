@@ -5,3 +5,5 @@ if test -e /opt/maemo/imgur-maemo.html; then
 	fi
 fi
 
+killall imgur-service
+
