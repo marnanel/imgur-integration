@@ -1,7 +1,7 @@
 if MAEMO
 # Under Maemo, also install the placeholder app.
 #
-optdir = /opt/maemo
+optdir = /opt/imgur
 opt_DATA = \
 	   imgur-maemo.html \
 	   sharing-button.jpg
