@@ -1,6 +1,7 @@
+#!/bin/bash
 case "$1" in
     configure)
-	if test -e /etc/maemo_version; then
+	if test -e /opt/imgur/imgur-maemo.html; then
 		/usr/bin/imgur-doc
 	fi
     ;;
