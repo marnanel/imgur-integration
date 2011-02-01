@@ -325,17 +325,6 @@ perform_upload (void)
               g_print ("imgur: action taken: %s\n", action);
             }
 
-	    if (show_browser &&
-		(!action || strcmp(action, "browser")!=0))
-	      {
-	        GValue *url = g_hash_table_lookup (result, "imgur_page");
-
-		if (url)
-	          {
-			launch_browser (g_value_get_string (url));
-	          }
-	      }
-
             print_hash_table (result, NULL);
 	    g_free (action);
 
