@@ -87,6 +87,7 @@ imgur_list_records (void)
 		gchar *thumbnail,
 			*thumbnail_extension,
 			*time,
+			*our_file_uri,
 			*our_thumbnail;
 		long timestamp;
 		ListEntry *entry;
@@ -143,6 +144,11 @@ imgur_list_records (void)
 			continue;
 		}
 
+		our_file_uri = g_filename_to_uri (our_thumbnail,
+				NULL,
+				/* FIXME: Should we really be ignoring errors? */
+				NULL);
+
 		entry = g_malloc (sizeof (ListEntry));
 		entry->time = timestamp;
 		entry->details = g_value_array_new (2);
@@ -155,7 +161,7 @@ imgur_list_records (void)
 
 		value = g_malloc0 (sizeof (GValue));
 		g_value_init (value, G_TYPE_STRING);
-		g_value_set_string (value, our_thumbnail);
+		g_value_set_string (value, our_file_uri);
 		g_value_array_append (entry->details, value);
 
 		count++;
@@ -164,6 +170,7 @@ imgur_list_records (void)
 
 		g_free (time);
 		g_free (thumbnail);
+		g_free (our_file_uri);
 	}
 
 	g_strfreev (entries);
