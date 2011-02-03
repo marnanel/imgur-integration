@@ -1,16 +1,15 @@
 #include <gtk/gtk.h>
 
-/*
- * FIXME: This needs to return an error value
- * for all possible error conditions.
- */
-
 int
 main (int argc, char **argv)
 {
 	GtkClipboard *clipboard;
 
-	gtk_init (&argc, &argv);
+	if (!gtk_init_check (&argc, &argv))
+	{
+		g_print ("X was not found. Cannot paste.\n");
+		return 255;
+	}
 
 	if (argc!=2)
 	{
@@ -20,6 +19,12 @@ main (int argc, char **argv)
 	}
 
 	clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+
+	if (!clipboard)
+	{
+		g_print ("Clipboard could not be found. Cannot paste.\n");
+		return 255;
+	}
 
 	gtk_clipboard_set_text (clipboard,
 		argv[1],
