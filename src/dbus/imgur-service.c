@@ -12,6 +12,14 @@
 #include "recording.h"
 #include "list-records.h"
 
+enum
+{
+	LIST_CHANGED_SIGNAL,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 #define G_IMGUR_ERROR g_imgur_error_quark ()
 GQuark
 g_imgur_error_quark (void)
@@ -35,6 +43,16 @@ imgur_upload_class_init (ImgurUploadClass *klass)
 
   dbus_g_object_type_install_info (IMGUR_TYPE_UPLOAD,
      &dbus_glib_imgur_service_object_info);
+
+  signals[LIST_CHANGED_SIGNAL] =
+	  g_signal_new ("list_changed",
+			  G_OBJECT_CLASS_TYPE (klass),
+			  G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+			  0,
+			  NULL, NULL,
+			  g_cclosure_marshal_VOID__VOID,
+			  G_TYPE_NONE, 0);
+
 }
 
 static void
@@ -96,6 +114,12 @@ imgur_upload_get_type (void)
     }
 
   return object_type;
+}
+
+gboolean imgur_service_emit_list_changed_signal (ImgurUpload *iu, GError **error)
+{
+	g_signal_emit (iu, signals[LIST_CHANGED_SIGNAL], 0);
+	return TRUE;
 }
 
 static void
@@ -236,14 +260,14 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result,
 }
 
 gboolean
-imgur_service_list_records (ImgurUpload *iu, gchar ***result, GError **error)
+imgur_service_list_records (ImgurUpload *iu, GPtrArray **result, GError **error)
 {
 	*result = imgur_list_records ();
 	return TRUE;
 }
 
 gboolean
-imgur_service_list_remote (ImgurUpload *iu, gboolean popular, gchar ***result, GError **error)
+imgur_service_list_remote (ImgurUpload *iu, gboolean popular, GPtrArray **result, GError **error)
 {
 	/* STUB */
 	*error = g_error_new (g_imgur_error_quark (),

@@ -24,7 +24,7 @@
          Lists all records of images we have locally.
     -->
     <method name="ListRecords">
-      <arg type="as" name="d_ret" direction="out" />
+      <arg type="a(ss)" name="d_ret" direction="out" />
     </method>
 
     <!--
@@ -35,7 +35,7 @@
     -->
     <method name="ListRemote">
       <arg type="b" name="popular" direction="in" />
-      <arg type="as" name="d_ret" direction="out" />
+      <arg type="a(ss)" name="d_ret" direction="out" />
     </method>
 
     <!--

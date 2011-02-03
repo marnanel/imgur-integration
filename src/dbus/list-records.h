@@ -11,7 +11,7 @@
  *          Entries may be in the form of filenames;
  *          if so, the path and extension are irrelevant.
  */
-gchar** imgur_list_records (void);
+GPtrArray* imgur_list_records (void);
 
 /**
  * Returns the details of a given record.

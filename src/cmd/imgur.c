@@ -347,23 +347,45 @@ static void
 show_all_records (void)
 {
 	GError *error = NULL;
-	gchar **list = NULL;
+	GPtrArray *list = NULL;
 
 	if (com_imgur_list_records (uploader, &list, &error))
 	{
-		gchar **cursor;
+		int i;
+		gboolean printed = FALSE;
 
-		for (cursor=list; *cursor; cursor++)
+		for (i=0; i<list->len; i++)
 		{
-			g_print ("%s\n", *cursor);
+			GValueArray *values = g_ptr_array_index (list, i);
+			GValue *id_v = g_value_array_get_nth (values, 0);
+			GValue *thumb_v = g_value_array_get_nth (values, 1);
+
+			if (id_v)
+			{
+				const gchar *id = g_value_get_string (id_v);
+				const gchar *thumb = NULL;
+
+				if (thumb_v)
+				{
+					thumb = g_value_get_string (thumb_v);
+				}
+				else
+				{
+					/* FIXME: use a real placeholder image */
+					thumb = "???";
+				}
+
+				g_print ("%s\t%s\n", id, thumb);
+				printed = TRUE;
+			}
 		}
 
-		if (!*list)
+		if (!printed)
 		{
 			fprintf (stderr, "(no records to list)\n");
 		}
 
-		g_strfreev (list);
+		/* FIXME: free the list */
 	}
 	else
 	{

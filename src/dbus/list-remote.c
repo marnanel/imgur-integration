@@ -17,18 +17,22 @@
  * 02111-1307, USA.
  */
 
-#ifndef UPLOAD_H
-#define UPLOAD_H 1
-
 #include <glib.h>
-
+#include <curl/curl.h>
+#include "list-remote.h"
 #include "prefs.h"
 
-void
-upload (ImgurPrefs *prefs,
-	gchar *filename,
-	gboolean *success,
-	gchar **result,
-	gboolean (*progress)(char));
+GPtrArray**
+list_remote (gboolean popular)
+{
+	gint count = 0;
+	GPtrArray **result;
 
-#endif
+	/* STUB */
+
+	count = 1;
+	result = g_malloc(sizeof(GPtrArray*)*(count+1));
+	result[count] = NULL;
+
+	return result;
+}

@@ -151,14 +151,17 @@ remove_temp_dir (const gchar* tempdir)
 static void
 test1 (void)
 {
-	gchar **records = imgur_list_records();
+	GPtrArray **records = imgur_list_records();
 	gchar *got = g_strdup("");
-	gchar **cursor;
+	GPtrArray **cursor;
 
 	for (cursor=records; *cursor; cursor++)
 	{
 		gchar *temp = got;
-		gchar *last_slash = strrchr (*cursor, '/');
+		gchar *first = (gchar*) g_ptr_array_index (*cursor, 0);
+		gchar *second = (gchar*) g_ptr_array_index (*cursor, 1);
+
+		gchar *last_slash = strrchr (second, '/');
 
 		if (last_slash)
 		{
@@ -166,12 +169,12 @@ test1 (void)
 		}
 		else
 		{
-			last_slash = *cursor;
+			last_slash = second;
 		}
 
-		got = g_strdup_printf ("%s[%s]",
+		got = g_strdup_printf ("%s[%s/%s]",
 			got,
-			last_slash);
+			first, last_slash);
 		g_free (temp);
 	}
 

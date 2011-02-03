@@ -17,18 +17,21 @@
  * 02111-1307, USA.
  */
 
-#ifndef UPLOAD_H
-#define UPLOAD_H 1
+#ifndef LIST_REMOTE_H
+#define LIST_REMOTE_H 1
 
 #include <glib.h>
 
-#include "prefs.h"
-
-void
-upload (ImgurPrefs *prefs,
-	gchar *filename,
-	gboolean *success,
-	gchar **result,
-	gboolean (*progress)(char));
+/**
+ * Lists some images on the remote server.
+ *
+ * \param popular  TRUE if you want the popular images;
+ *                 FALSE if you want the most recent images.
+ * \return A null-terminated list of GPtrArray*s, which the
+ *         caller should free. If there are no images
+ *         to be listed, returns a pointer to NULL.
+ */
+GPtrArray**
+list_remote (gboolean popular);
 
 #endif

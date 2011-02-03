@@ -28,9 +28,9 @@ GType imgur_upload_get_type (void);
 
 gboolean imgur_service_upload (ImgurUpload *upload, gchar *filename, GHashTable **result,
 	gchar **action_ret, GError **error);
-gboolean imgur_service_list_records (ImgurUpload *upload, gchar ***result, GError **error);
+gboolean imgur_service_list_records (ImgurUpload *upload, GPtrArray **result, GError **error);
 gboolean imgur_service_list_remote (ImgurUpload *upload, gboolean popular,
-	gchar ***result, GError **error);
+	GPtrArray **result, GError **error);
 gboolean imgur_service_get_record (ImgurUpload *upload, gchar *record, GHashTable **result, GError **error);
 gboolean imgur_service_forget_record (ImgurUpload *iu, gchar *record, GError **error);
 gboolean imgur_service_delete_record (ImgurUpload *iu, gchar *record, GError **error);

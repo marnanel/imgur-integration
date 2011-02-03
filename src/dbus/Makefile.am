@@ -5,6 +5,7 @@ noinst_PROGRAMS = \
 	test-upload \
 	test-recording \
 	test-list-records \
+	test-list-remote \
 	test-prefs
 
 imgur_service_SOURCES = \
@@ -46,6 +47,11 @@ test_list_records_SOURCES = \
 	list-records.h \
 	test-list-records.c
 
+test_list_remote_SOURCES = \
+	list-remote.c \
+	list-remote.h \
+	test-list-remote.c
+
 imgur-service-glue.h: $(top_builddir)/data/imgur-service-glue.xml
 	$(DBUSBINDINGTOOL) --mode=glib-server --output=$@ --prefix=imgur_service $^
 BUILT_SOURCES = imgur-service-glue.h
@@ -63,6 +69,9 @@ test_prefs_LDADD = \
 	$(ALL_LIBS)
 
 test_list_records_LDADD = \
+	$(ALL_LIBS)
+
+test_list_remote_LDADD = \
 	$(ALL_LIBS)
 
 AM_CFLAGS = \

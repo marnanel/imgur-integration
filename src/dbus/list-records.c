@@ -5,7 +5,7 @@
 
 typedef struct _ListEntry
 {
-	gchar *filename;
+	GValueArray *details;
 	long time;
 } ListEntry;
 
@@ -53,10 +53,18 @@ get_keyfile (const gchar* path)
 	return keyfile;
 }
 
-gchar**
+static void
+clean_up_list (gpointer pointer)
+{
+	GPtrArray *list = pointer;
+	/* STUB FIXME */
+	g_warning ("Would clean up list %p here", list);
+}
+
+GPtrArray*
 imgur_list_records (void)
 {
-	gchar **result = NULL, **result_cursor;
+	GPtrArray *result = g_ptr_array_new ();
 	GKeyFile *keyfile;
 	gchar **entries, **cursor;
 	gchar *path;
@@ -69,9 +77,7 @@ imgur_list_records (void)
 	if (!keyfile)
 	{
 		g_free (path);
-		result = g_malloc (sizeof (gchar* ));
-		*result = NULL;
-		return result;
+		return g_ptr_array_new ();
 	}
 
 	entries = g_key_file_get_groups (keyfile, NULL);
@@ -84,6 +90,7 @@ imgur_list_records (void)
 			*our_thumbnail;
 		long timestamp;
 		ListEntry *entry;
+		GValue *value;
 
 		thumbnail = g_key_file_get_string (keyfile,
 			*cursor,
@@ -138,7 +145,18 @@ imgur_list_records (void)
 
 		entry = g_malloc (sizeof (ListEntry));
 		entry->time = timestamp;
-		entry->filename = our_thumbnail;
+		entry->details = g_value_array_new (2);
+
+		/* FIXME Check this carefully for memory leaks */
+		value = g_malloc0 (sizeof (GValue));
+		g_value_init (value, G_TYPE_STRING);
+		g_value_set_string (value, *cursor);
+		g_value_array_append (entry->details, value);
+
+		value = g_malloc0 (sizeof (GValue));
+		g_value_init (value, G_TYPE_STRING);
+		g_value_set_string (value, our_thumbnail);
+		g_value_array_append (entry->details, value);
 
 		count++;
 		candidates = g_list_prepend (candidates,
@@ -154,11 +172,10 @@ imgur_list_records (void)
 	candidates = g_list_sort (candidates,
 		compare_entries);
 
-	result = g_malloc (sizeof (gchar*) * (count+1));
-	result[count] = NULL;
-	result_cursor = result;
+	result = g_ptr_array_sized_new (count);
+	g_ptr_array_set_free_func (result, clean_up_list);
 
-	/* Now go through and pick out the names */
+	/* Now go through and pick out the details */
 
 	for (candidate_cursor = candidates;
 		candidate_cursor;
@@ -166,13 +183,13 @@ imgur_list_records (void)
 	{
 		ListEntry *entry = (ListEntry*) candidate_cursor->data;
 
-		*result_cursor = entry->filename;
+		g_ptr_array_add (result, entry->details);
 		g_free (entry);
-
-		result_cursor++;
 	}
 
 	g_list_free (candidates);
+
+	g_print ("ALL DONE");
 
 	return result;
 }
