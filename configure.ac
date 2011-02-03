@@ -72,10 +72,21 @@ AC_ARG_ENABLE(libsharing,
                  [build Maemo libsharing plugin]),,
   enable_libsharing=$default_libsharing)
 
+AC_ARG_ENABLE(gimgur,
+  AC_HELP_STRING([--enable-gimgur],
+                 [build gimgur (the GUI client)]),,
+  enable_gimgur=yes)
+
+AC_ARG_ENABLE(clipboard,
+  AC_HELP_STRING([--enable-clipboard],
+                 [give the DBus service access to the clipboard]),,
+  enable_clipboard=yes)
+
 dnl ----
 
 AM_CONDITIONAL(WANT_EOG, test x$enable_eog = xyes)
 AM_CONDITIONAL(WANT_LIBSHARING, test x$enable_libsharing != xno)
+AM_CONDITIONAL(WANT_CLIPBOARD, test x$enable_clipboard = xyes)
 AM_CONDITIONAL(MAEMO, test x$enable_maemo = xyes)
 
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.4, gobject-2.0 >= 2.4])
@@ -109,16 +120,27 @@ if test x$enable_libsharing = xyes; then
     AC_SUBST(HILDON_CFLAGS)
     AC_SUBST(HILDON_LIBS)
 
-    dnl Note to my future self:
-    dnl When we add the GUI client, GTK will need
-    dnl to be included when we have EITHER that client
-    dnl OR libsharing turned on.
+fi
 
+if test x$enable_clipboard = xyes; then
+    AC_DEFINE(WANT_CLIPBOARD,1,[Allow the DBus service access to the clipboard])
+fi
+
+
+dnl Reasons we would want GTK:
+dnl  - If the clipboard option was turned on
+dnl  - If gimgur is enabled
+dnl  - If Maemo libsharing is enabled
+
+if test x$enable_libsharing = xyes -o \
+	x$enable_gimgur = xyes -o \
+	x$enable_clipboard = xyes; then
     PKG_CHECK_MODULES(GTK, [gtk+-2.0])
     AC_SUBST(GTK_CFLAGS)
     AC_SUBST(GTK_LIBS)
 
 fi
+
 
 if test x$enable_libsocialweb = xyes; then
 	AC_DEFINE(HAVE_LIBSOCIALWEB,1,[Build with libsocialweb support])
