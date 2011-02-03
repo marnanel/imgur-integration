@@ -340,6 +340,44 @@ perform_upload (void)
 	  }
 }
 
+static void
+dump_list_of_pairs (GPtrArray *list)
+{
+	int i;
+	gboolean printed = FALSE;
+
+	for (i=0; i<list->len; i++)
+	{
+		GValueArray *values = g_ptr_array_index (list, i);
+		GValue *id_v = g_value_array_get_nth (values, 0);
+		GValue *thumb_v = g_value_array_get_nth (values, 1);
+
+		if (id_v)
+		{
+			const gchar *id = g_value_get_string (id_v);
+			const gchar *thumb = NULL;
+
+			if (thumb_v)
+			{
+				thumb = g_value_get_string (thumb_v);
+			}
+			else
+			{
+				/* FIXME: use a real placeholder image */
+				thumb = "???";
+			}
+
+			g_print ("%s\t%s\n", id, thumb);
+			printed = TRUE;
+		}
+	}
+
+	if (!printed)
+	{
+		fprintf (stderr, "(no records to list)\n");
+	}
+}
+
 /**
  * Prints an identifier for every known record to standard output.
  */
@@ -351,41 +389,7 @@ show_all_records (void)
 
 	if (com_imgur_list_records (uploader, &list, &error))
 	{
-		int i;
-		gboolean printed = FALSE;
-
-		for (i=0; i<list->len; i++)
-		{
-			GValueArray *values = g_ptr_array_index (list, i);
-			GValue *id_v = g_value_array_get_nth (values, 0);
-			GValue *thumb_v = g_value_array_get_nth (values, 1);
-
-			if (id_v)
-			{
-				const gchar *id = g_value_get_string (id_v);
-				const gchar *thumb = NULL;
-
-				if (thumb_v)
-				{
-					thumb = g_value_get_string (thumb_v);
-				}
-				else
-				{
-					/* FIXME: use a real placeholder image */
-					thumb = "???";
-				}
-
-				g_print ("%s\t%s\n", id, thumb);
-				printed = TRUE;
-			}
-		}
-
-		if (!printed)
-		{
-			fprintf (stderr, "(no records to list)\n");
-		}
-
-		/* FIXME: free the list */
+		dump_list_of_pairs (list);
 	}
 	else
 	{
@@ -395,7 +399,9 @@ show_all_records (void)
 		exit (EXIT_IMGUR_ERROR);
 	}
 	
+	/* FIXME: free list? */
 }
+
 
 /**
  * Prints all details of one record to standard output.
