@@ -53,18 +53,10 @@ get_keyfile (const gchar* path)
 	return keyfile;
 }
 
-static void
-clean_up_list (gpointer pointer)
-{
-	GPtrArray *list = pointer;
-	/* STUB FIXME */
-	g_warning ("Would clean up list %p here", list);
-}
-
 GPtrArray*
 imgur_list_records (void)
 {
-	GPtrArray *result = g_ptr_array_new ();
+	GPtrArray *result;
 	GKeyFile *keyfile;
 	gchar **entries, **cursor;
 	gchar *path;
@@ -180,7 +172,6 @@ imgur_list_records (void)
 		compare_entries);
 
 	result = g_ptr_array_sized_new (count);
-	g_ptr_array_set_free_func (result, clean_up_list);
 
 	/* Now go through and pick out the details */
 
@@ -195,8 +186,6 @@ imgur_list_records (void)
 	}
 
 	g_list_free (candidates);
-
-	g_print ("ALL DONE");
 
 	return result;
 }
