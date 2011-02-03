@@ -21,8 +21,6 @@ main (int argc, char **argv)
 
 	clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
 
-	g_print ("Clipboard is %p\n", clipboard);
-
 	gtk_clipboard_set_text (clipboard,
 		argv[1],
 		-1);
