@@ -195,8 +195,7 @@ imgur_service_upload (ImgurUpload *iu, gchar *filename, GHashTable **result,
 	        filename);
        }
 
-       action_perform (prefs->action, filename);
-       *action_ret = g_strdup (action_to_string (prefs->action));
+       action_perform (prefs->action, filename, action_ret);
 
        g_list_free (parsed);
        g_free (message);

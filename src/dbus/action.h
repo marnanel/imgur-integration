@@ -34,6 +34,7 @@ typedef enum _AfterwardsAction {
 
 AfterwardsAction action_from_string (const gchar *str);
 gchar* action_to_string (AfterwardsAction action);
-void action_perform (AfterwardsAction action, const gchar *filename);
+void action_perform (AfterwardsAction action, const gchar *filename,
+	gchar **result);
 
 #endif
