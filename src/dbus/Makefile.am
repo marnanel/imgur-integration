@@ -9,6 +9,18 @@ noinst_PROGRAMS = \
 	test-fetch \
 	test-prefs
 
+if WANT_CLIPBOARD
+noinst_PROGRAMS += \
+	imgur-clipboard
+imgur_clipboard_SOURCES = \
+	clipboard.c
+imgur_clipboard_LDADD = \
+	$(ALL_LIBS) \
+	$(GTK_LIBS)
+imgur_clipboard_CFLAGS = \
+	$(GTK_CFLAGS)
+endif
+
 imgur_service_SOURCES = \
 	imgur-service.c \
 	imgur-upload.h \
