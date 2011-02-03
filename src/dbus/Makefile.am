@@ -10,7 +10,7 @@ noinst_PROGRAMS = \
 	test-prefs
 
 if WANT_CLIPBOARD
-noinst_PROGRAMS += \
+libexec_PROGRAMS += \
 	imgur-clipboard
 imgur_clipboard_SOURCES = \
 	clipboard.c
