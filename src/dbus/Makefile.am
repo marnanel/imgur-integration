@@ -7,6 +7,7 @@ noinst_PROGRAMS = \
 	test-list-records \
 	test-list-remote \
 	test-fetch \
+	test-xmlscan \
 	test-prefs
 
 if WANT_CLIPBOARD
@@ -55,6 +56,13 @@ test_prefs_SOURCES = \
 	action.c \
 	test-prefs.c
 
+test_xmlscan_SOURCES = \
+	xmlscan.c \
+	xmlscan.h \
+	thurman-test.c \
+	thurman-test.h \
+	test-xmlscan.c
+
 test_list_records_SOURCES = \
 	list-records.c \
 	list-records.h \
@@ -90,6 +98,9 @@ test_list_records_LDADD = \
 	$(ALL_LIBS)
 
 test_list_remote_LDADD = \
+	$(ALL_LIBS)
+
+test_xmlscan_LDADD = \
 	$(ALL_LIBS)
 
 test_fetch_LDADD = \
