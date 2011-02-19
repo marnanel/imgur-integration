@@ -2,6 +2,7 @@
 #include <glib-object.h>
 #include <string.h>
 #include <stdlib.h>
+#include <glib/gstdio.h>
 
 typedef struct _ListEntry
 {
@@ -31,13 +32,19 @@ get_path (void)
 			NULL);
 }
 
+static gchar*
+get_filename (const gchar *path)
+{
+	return g_build_filename (path,
+			"uploads.conf",
+			NULL);
+}
+
 static GKeyFile*
 get_keyfile (const gchar* path)
 {
 	GKeyFile *keyfile = g_key_file_new ();
-	char *filename = g_build_filename (path,
-			"uploads.conf",
-			NULL);
+	char *filename = get_filename (path);
 
 	if (g_key_file_load_from_file (keyfile,
 				filename,
@@ -203,6 +210,48 @@ add_hash_entry (GHashTable *hash,
 	g_hash_table_insert (hash, g_strdup(key), v);
 }
 
+/**
+ * Returns the address of the local thumbnail of an
+ * image. Does not check whether it actually exists.
+ *
+ * \return  The filename, as a path (not a URL).
+ *          Caller must g_free() it.
+ */
+gchar *
+get_local_thumbnail (gchar *path,
+	GKeyFile *keyfile,
+	const gchar* record_name)
+{
+	gchar *result;
+	gchar *extension = NULL;
+	gchar *small;
+
+	small = g_key_file_get_string (keyfile,
+				record_name,
+				"small_thumbnail",
+				NULL);
+
+	if (small)
+	{
+		extension = strrchr (small, '.');
+	}
+	
+	if (!extension)
+	{
+		/* ugh */
+		extension = ".jpg";
+	}
+
+	result = g_strdup_printf ("%s/%s%s",
+		path,
+		record_name,
+		extension);
+
+	g_free (small);
+
+	return result;
+}
+
 GHashTable*
 imgur_get_record (const gchar* record_name)
 {
@@ -210,8 +259,7 @@ imgur_get_record (const gchar* record_name)
 	GKeyFile *keyfile = get_keyfile (path);
 	GHashTable *result = g_hash_table_new (g_str_hash, g_str_equal);
 	gchar **keys, **cursor;
-	gchar *temp, *extension = NULL;
-
+	gchar *local_thumbnail = NULL;
 	if (!keyfile)
 	{
 		g_free (path);
@@ -239,41 +287,68 @@ imgur_get_record (const gchar* record_name)
 		add_hash_entry (result,
 			*cursor,
 			value);
-
-		if (strcmp (*cursor, "small_thumbnail")==0)
-		{
-			extension = strrchr (value, '.');
-		}
 	}
 
-	if (!extension)
-	{
-		/* ugh */
-		extension = ".jpg";
-	}
+	local_thumbnail = get_local_thumbnail (path,
+		keyfile,
+		record_name);
 
-	temp = g_strdup_printf ("%s/%s%s",
-		path,
-		record_name,
-		extension);
-
-	if (g_file_test (temp,
+	if (g_file_test (local_thumbnail,
 		G_FILE_TEST_IS_REGULAR))
 	{
 		add_hash_entry (result,
 			"local_thumbnail",
-			temp);
+			local_thumbnail);
 	}
+	g_free (local_thumbnail);
 
 	/* Since we took it out before storage: */
 	add_hash_entry (result,
 		"image_hash",
 		record_name);
 
+	/* FIXME: free the keyfile? */
 	g_strfreev (keys);
-	g_free (temp);
 	g_free (path);
 
 	return result;
 }
+
+gboolean
+imgur_forget_record (const gchar *record_name)
+{
+	gboolean result = TRUE;
+	gchar *path = get_path ();
+	gchar *filename = get_filename (path);
+	GKeyFile *keyfile = get_keyfile (path);
+	gchar *local_thumbnail = get_local_thumbnail (path,
+		keyfile,
+		record_name);
+	gchar *temp;
+
+	if (g_file_test (local_thumbnail,
+		G_FILE_TEST_IS_REGULAR))
+	{
+		g_unlink (local_thumbnail);
+	}
+
+	result = g_key_file_remove_group (keyfile,
+		record_name,
+		NULL);
+
+	temp = g_key_file_to_data (keyfile,
+		NULL, NULL);
+
+	g_file_set_contents (filename,
+		temp,
+		-1, NULL);
+
+	g_free (temp);
+	g_free (filename);
+	g_free (path);
+
+	/* FIXME: free the keyfile? */
+	return result;
+}
+
 
