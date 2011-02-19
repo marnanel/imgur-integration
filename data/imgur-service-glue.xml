@@ -85,5 +85,23 @@
       <arg type="a{sv}" name="d_ret" direction="out" />
     </method>
 
+    <!--
+	Returns details of the credits on your account.
+    -->
+     <method name="ShowCredits">
+      <arg type="a{sv}" name="d_ret" direction="out" />
+    </method>
+
+    <!--
+	Logs in using OAuth, if "auth" is true. This will involve
+	launching the browser.
+
+	If "auth" is false, switches back to anonymous login.
+    -->
+    <method name="LogIn">
+      <arg type="b" name="auth" direction="in" />
+    </method>
+
+
   </interface>
 </node>

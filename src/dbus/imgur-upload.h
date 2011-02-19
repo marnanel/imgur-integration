@@ -35,5 +35,7 @@ gboolean imgur_service_get_record (ImgurUpload *upload, gchar *record, GHashTabl
 gboolean imgur_service_forget_record (ImgurUpload *iu, gchar *record, GError **error);
 gboolean imgur_service_delete_record (ImgurUpload *iu, gchar *record, GError **error);
 gboolean imgur_service_stats_for_record (ImgurUpload *iu, gchar *record, GHashTable **result, GError **error);
+gboolean imgur_service_show_credits (ImgurUpload *iu, GHashTable **result, GError **error);
+gboolean imgur_service_log_in (ImgurUpload *iu, gboolean auth, GError **error);
 
 #endif

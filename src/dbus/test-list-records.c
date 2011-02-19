@@ -151,7 +151,7 @@ remove_temp_dir (const gchar* tempdir)
 static void
 test1 (void)
 {
-	GPtrArray **records = imgur_list_records();
+	GPtrArray *records = imgur_list_records();
 	gchar *got = g_strdup("");
 	GPtrArray **cursor;
 

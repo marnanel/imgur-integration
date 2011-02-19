@@ -336,6 +336,27 @@ imgur_service_stats_for_record (ImgurUpload *iu, gchar *record, GHashTable **res
 	return FALSE;
 }
 
+gboolean
+imgur_service_show_credits (ImgurUpload *iu, GHashTable **result, GError **error)
+{
+	/* STUB */
+	*error = g_error_new (g_imgur_error_quark (),
+		4,
+		"Not yet implemented.");
+	*result = NULL;
+	return FALSE;
+}
+
+gboolean
+imgur_service_log_in (ImgurUpload *iu, gboolean auth, GError **error)
+{
+	/* STUB */
+	*error = g_error_new (g_imgur_error_quark (),
+		4,
+		"Not yet implemented.");
+	return FALSE;
+}
+
 int
 main (int argc, char **argv)
 {
