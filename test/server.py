@@ -26,6 +26,8 @@ port = 1024+ int(64511*random.random())
 launch_browser = 0
 launch_shell = 0
 
+# FIXME: Make this an option
+# (or shrink it and base64 encode it here?)
 filename = 'lsm.jpg'
 if not os.path.exists(filename):
 	print "We need the image %s to be available." % (filename)
@@ -37,14 +39,17 @@ picture_md5 = hashlib.md5()
 picture_md5.update(picture)
 
 options = getopt.getopt(sys.argv[1:], 'bhs:')
+command = []
 
 for option in options[0]:
 	if option[0]=='-b':
 		launch_browser = 1
 	elif option[0]=='-h':
 		usage()
+	else:
+		command.push(option)
 
-if not options[1]:
+if not launch_browser and not command:
 	usage()
 
 class FakeImgur(SimpleHTTPServer.SimpleHTTPRequestHandler):
@@ -53,6 +58,8 @@ class FakeImgur(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			self.show_picture()
 		elif self.path == '/':
 			self.show_main()
+		elif self.path == '/test/credits.xml':
+			self.show_credits()
 		else:
 			self.show_404()
 
@@ -72,13 +79,16 @@ class FakeImgur(SimpleHTTPServer.SimpleHTTPRequestHandler):
 	def show_main(self):
 		page = '<html><head><title>imgur integration</title></head>\n'
 		page += '<body><h1>imgur integration server</h1>\n'
+		page += '<img src="/abc123.jpg" width="500" height="438" alt="" align="right" />'
+		page += '<ul>\n'
+		page += '<li><a href="/test/credits.xml">Check credits.</a></li>\n'
+		page += '</ul>\n'
 		page += '<p>Upload an image:</p>\n'
 		page += '<form method="POST" enctype="multipart/form-data" action="/upload.xml">\n'
 		page += '<input type="file" name="image"/>\n'
 		page += '<input type="hidden" name="key" value="dummy" />\n'
 		page += '<input type="submit" />\n'
 		page += '</form>\n'
-		page += '<img src="/abc123.jpg" width="500" height="438" alt="" />'
 		page += '</body></html>'
 
 		self.wfile.write('HTTP/1.1 200 Found\n')
@@ -86,6 +96,14 @@ class FakeImgur(SimpleHTTPServer.SimpleHTTPRequestHandler):
 		self.wfile.write('Content-Length: %d\n' % (len(page)))
 		self.wfile.write('\n')
 		self.wfile.write(page)
+
+	def send_output(self, output, status='200 OK', content_type='text/html'):
+		# FIXME: This needs to be used in many more places
+		self.wfile.write('HTTP/1.1 %s\n' % (status,))
+		self.wfile.write('Content-Type: %s\n' % (content_type,))
+		self.wfile.write('Content-Length: %d\n' % (len(output)))
+		self.wfile.write('\n')
+		self.wfile.write(output)
 
 	def receive_image(self):
 		
@@ -126,13 +144,14 @@ class FakeImgur(SimpleHTTPServer.SimpleHTTPRequestHandler):
 		for line in sorted(results.keys()):
 			page += '  <%s>%s</%s>\n' % (line, results[line], line)
 		page += '</%s>\n' % (outertag,)
-		
-		self.wfile.write('HTTP/1.1 200 Found\n')
-		self.wfile.write('Content-Type: text/plain\n')
-		self.wfile.write('Content-Length: %d\n' % (len(page)))
-		self.wfile.write('\n')
-		self.wfile.write(page)
 
+		self.send_output(page,
+			content_type = 'text/plain')
+
+	def show_credits(self):
+		page = 'You what?'
+		self.send_output(page,
+			content_type = 'text/plain')
 
 	def show_404(self):
 		page = '<html><head><title>Not found</title>\n'
@@ -160,8 +179,14 @@ if launch_browser:
 
 env = os.environ
 env['IMGUR_URL'] = 'http://localhost:%d/upload.xml' % (port,)
+env['IMGUR_TEST_SERVER'] = '1'
 
-child_pid = os.spawnvpe(os.P_NOWAIT, options[1][0], options[1], env)
+if command:
+	child_pid = os.spawnvpe(os.P_NOWAIT, command[0], command, env)
+	# FIXME: When this child exits, exit the program
+else:
+	print "Blocking indefinitely because we launched the browser"
+	print "and no command was given. Use ctrl-C to exit."
 
 httpd.serve_forever()
 
