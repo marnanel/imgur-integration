@@ -65,4 +65,22 @@ ImgurPrefs* imgur_prefs_new(void);
  */
 void imgur_prefs_free(ImgurPrefs *prefs);
 
+/**
+ * Returns a URL for version 2 of the Imgur API.
+ * The basic path may be overridden from the prefs.
+ * You may also supply a sequence of pairs of strings,
+ * which become a query string appended to the URL.
+ * This is over-simple; there will be no escaping.
+ * Be careful.
+ * End the list with a NULL.
+ *
+ * \param prefs   The preferences.
+ * \param method  The method we're calling.
+ * \return  The URL. The caller should free it with g_free().
+ */
+G_GNUC_NULL_TERMINATED
+gchar *imgur_prefs_get_url (ImgurPrefs *prefs,
+	gchar *method,
+	...);
+
 #endif /* !PREFS_H */

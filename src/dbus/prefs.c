@@ -1,6 +1,9 @@
 #include "prefs.h"
+#include <stdarg.h>
 
 #define IMGUR_DEFAULT_URL "http://imgur.com/api/upload.xml"
+
+#define IMGUR_DEFAULT_V2_URL "http://api.imgur.com/2"
 
 /**
  * The key we use to identify ourselves as a client
@@ -74,7 +77,7 @@ imgur_prefs_new(void)
 
 	g_free (path);
 
-	result->api = get_value (ini, "api", IMGUR_DEFAULT_URL);
+	result->api = get_value (ini, "api", IMGUR_DEFAULT_V2_URL);
 	result->key = get_value (ini, "key", IMGUR_KEY);
 	result->username = get_value (ini, "username", NULL);
 	result->password = get_value (ini, "password", NULL);
@@ -103,5 +106,38 @@ imgur_prefs_free(ImgurPrefs *prefs)
 	g_free (prefs->username);
 	g_free (prefs->password);
 	g_free (prefs);
+}
+
+gchar *
+imgur_prefs_get_url (ImgurPrefs *prefs,
+        gchar *method,
+        ...)
+{
+	va_list ap;
+	gboolean first = TRUE;
+	gboolean odd = TRUE;
+	gchar *cursor;
+	gchar *result =
+		g_strdup_printf ("%s/%s.xml",
+			prefs->api,
+			method);
+
+	va_start (ap, method);
+
+	while ((cursor = va_arg (ap, gchar*)))
+	{
+		gchar *temp = result;
+		result = g_strdup_printf("%s%c%s",
+			result,
+			odd? (first? '?': '&'): '=',
+			cursor);
+		g_free (temp);
+		odd = !odd;
+		first = FALSE;
+	}
+
+	va_end (ap);
+
+	return result;
 }
 

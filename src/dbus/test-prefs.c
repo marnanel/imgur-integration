@@ -130,6 +130,50 @@ test2 (void)
 	g_free (path);
 }
 
+/* not pass/fail yet */
+static void
+test3 (void)
+{
+	ImgurPrefs *prefs;
+	gchar *got;
+	gchar *path = g_build_filename (g_getenv ("XDG_CONFIG_HOME"),
+		"imgur",
+		NULL);
+	gchar *filename = g_build_filename (path,
+		"imgur.conf",
+		NULL);
+
+	mkdir (path, 0700);
+
+	if (!g_file_set_contents (filename,
+		"# This is a comment.\n"
+		"[general]\n"
+		"api=http://wombat.example.com/foo/\n",
+		-1, NULL))
+	{
+		g_warning ("Could not create test file!");
+		exit (255);
+	}
+
+	prefs = imgur_prefs_new ();
+
+	got = imgur_prefs_get_url (prefs,
+		"badger",
+		"fred", "bassett",
+		"jim", "jam",
+		"sheila", "bloke",
+		NULL);
+
+	g_print ("Got: %s\n", got);
+
+	imgur_prefs_free (prefs);
+
+	unlink (filename);
+	g_free (filename);
+	rmdir (path);
+	g_free (path);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -137,6 +181,7 @@ main (int argc, char** argv)
 	
 	test1 ();
 	test2 ();
+	test3 ();
 
 	rmdir (temp_dir);
 	g_free (temp_dir);
