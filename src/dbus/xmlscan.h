@@ -15,11 +15,13 @@
  * \param xml        The XML text.
  * \param wrapper    The outermost wrapper tag.
  * \param user_data  User data to pass to the callback.
+ * \param error      An optional GError.
  * \return           A hash table mapping strings to strings.
  *                   Free it with g_hash_table_unref() when done.
  */
 GHashTable *xml_scan (const gchar *xml,
-	gchar *wrapper);
+	gchar *wrapper,
+	GError **error);
 
 #endif
 

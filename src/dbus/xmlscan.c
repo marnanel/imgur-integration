@@ -88,9 +88,17 @@ GMarkupParser xml_scan_parser = {
 	NULL, /* no error handler, rely on the boolean result */
 };
 
+#define G_IMGUR_ERROR g_imgur_error_quark ()
+GQuark
+g_imgur_error_quark (void)
+{
+  return g_quark_from_static_string ("g-imgur-error-quark");
+}
+
 GHashTable*
 xml_scan (const gchar *xml,
-        gchar *wrapper)
+        gchar *wrapper,
+	GError **error)
 {
 	XmlScanPrivate private;
 	GMarkupParseContext *context;
@@ -116,6 +124,9 @@ xml_scan (const gchar *xml,
 
 	g_markup_parse_context_free (context);
 
+	/* FIXME: Perhaps it would be nice to report an error
+	if the wrapper tag was not seen. */
+
 	if (parse_result)
 	{
 		/* it all worked; return the hash */
@@ -125,6 +136,14 @@ xml_scan (const gchar *xml,
 	{
 		/* it failed */
 		g_hash_table_unref (private.result);
+
+		if (error)
+		{
+			*error = g_error_new (G_IMGUR_ERROR,
+				5, "Failure in parsing XML");
+				
+		}
+
 		return NULL;
 	}
 }

@@ -69,9 +69,20 @@ test_scan (gchar *xml, gchar *want)
 	GHashTable *result;
 	gchar *str;
 	gboolean match;
+	GError *error = 0;
 
-	result = xml_scan (xml, "test");
+	result = xml_scan (xml, "test", &error);
 	str = hash_to_string (result);
+
+	if (error)
+	{
+		gchar *temp = str;
+		str = g_strdup_printf ("%s - %s",
+			str, error->message);
+		g_free (temp);
+		g_error_free (error);
+	}
+
 	match = strings_match (want, str);
 	if (result)
 		g_hash_table_unref (result);
