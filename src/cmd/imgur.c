@@ -22,6 +22,8 @@ enum {
 gboolean show_browser = FALSE;
 gboolean list_all_records = FALSE;
 gboolean list_some_records = FALSE;
+gboolean list_popular_remote = FALSE;
+gboolean list_recent_remote = FALSE;
 gchar *filename = NULL;
 
 DBusGConnection *connection = NULL;
@@ -35,6 +37,8 @@ static GOptionEntry entries[] =
 		"List previous uploads", NULL },
 	{ "records", 'r', 0, G_OPTION_ARG_NONE, &list_some_records,
 		"List details of a previous upload", NULL },
+	{ "popular", 'P', 0, G_OPTION_ARG_NONE, &list_popular_remote,
+		"List popular images on the server", NULL },
 	{ NULL }
 };
 
@@ -73,7 +77,8 @@ parse_commandline (int argc, char **argv)
 	    filename += 5;
 	  }
 
-	if (!filename && !list_all_records)
+	if (!filename && !list_all_records &&
+		!list_popular_remote && !list_recent_remote)
 	  {
 	    gchar *help = g_option_context_get_help (context,
 		FALSE, NULL);
@@ -402,6 +407,26 @@ show_all_records (void)
 	/* FIXME: free list? */
 }
 
+static void
+show_remote (gboolean popular)
+{
+	GError *error = NULL;
+	GPtrArray *list = NULL;
+
+	if (com_imgur_list_remote (uploader, popular, &list, &error))
+	{
+		dump_list_of_pairs (list);
+	}
+	else
+	{
+		fprintf (stderr, "imgur: error in listing records: %s\n",
+			error->message);
+		g_error_free (error);
+		exit (EXIT_IMGUR_ERROR);
+	}
+	
+	/* FIXME: free list? */
+}
 
 /**
  * Prints all details of one record to standard output.
@@ -438,6 +463,12 @@ main (int argc, char **argv)
 
 	if (list_all_records)
 		show_all_records ();
+
+	if (list_popular_remote)
+		show_remote (TRUE);
+
+	if (list_recent_remote)
+		show_remote (FALSE);
 
 	if (filename)
 	{
