@@ -39,6 +39,8 @@ static GOptionEntry entries[] =
 		"List details of a previous upload", NULL },
 	{ "popular", 'P', 0, G_OPTION_ARG_NONE, &list_popular_remote,
 		"List popular images on the server", NULL },
+	{ "remote", 'R', 0, G_OPTION_ARG_NONE, &list_recent_remote,
+		"List recent images on the server", NULL },
 	{ NULL }
 };
 
